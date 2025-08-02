@@ -1,0 +1,31 @@
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.is-tab-invalid {
+    background-color: red;
+    color: white;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 220px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* Ajuste a posição conforme necessário */
+    left: 50%;
+    margin-left: -110px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip-icon:hover + .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}

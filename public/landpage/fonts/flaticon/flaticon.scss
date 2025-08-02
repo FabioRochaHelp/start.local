@@ -1,0 +1,233 @@
+$flaticon-font: "flaticon";
+
+@font-face {
+    font-family: $flaticon-font;
+    src: url("./flaticon.ttf?8a7da0b5662077199cbf2d40f9866276") format("truetype"),
+url("./flaticon.woff?8a7da0b5662077199cbf2d40f9866276") format("woff"),
+url("./flaticon.woff2?8a7da0b5662077199cbf2d40f9866276") format("woff2"),
+url("./flaticon.eot?8a7da0b5662077199cbf2d40f9866276#iefix") format("embedded-opentype"),
+url("./flaticon.svg?8a7da0b5662077199cbf2d40f9866276#flaticon") format("svg");
+}
+
+i[class^="flaticon-"]:before, i[class*=" flaticon-"]:before {
+    font-family: flaticon !important;
+    font-style: normal;
+    font-weight: normal !important;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+$flaticon-map: (
+    "location": "\f101",
+    "phone-call": "\f102",
+    "heart": "\f103",
+    "shopping-cart": "\f104",
+    "menu": "\f105",
+    "call": "\f106",
+    "phone": "\f107",
+    "envelope": "\f108",
+    "message": "\f109",
+    "clipboard": "\f10a",
+    "calendar": "\f10b",
+    "event": "\f10c",
+    "man": "\f10d",
+    "user": "\f10e",
+    "group": "\f10f",
+    "teamwork": "\f110",
+    "team": "\f111",
+    "back": "\f112",
+    "arrow": "\f113",
+    "tick": "\f114",
+    "close": "\f115",
+    "accept": "\f116",
+    "menu-1": "\f117",
+    "upload": "\f118",
+    "next": "\f119",
+    "download": "\f11a",
+    "back-1": "\f11b",
+    "back-2": "\f11c",
+    "airplane": "\f11d",
+    "air-freight": "\f11e",
+    "home": "\f11f",
+    "doctor": "\f120",
+    "medicine": "\f121",
+    "health-check": "\f122",
+    "doctor-1": "\f123",
+    "heart-1": "\f124",
+    "stethoscope": "\f125",
+    "pills": "\f126",
+    "medical-record": "\f127",
+    "heartbeat": "\f128",
+    "pharmacy": "\f129",
+    "ambulance": "\f12a",
+    "ambulance-1": "\f12b",
+    "ambulance-2": "\f12c",
+    "hospital": "\f12d",
+    "hospital-1": "\f12e",
+    "hospital-bed": "\f12f",
+    "hospital-2": "\f130",
+    "mail": "\f131",
+    "teeth": "\f132",
+    "eye": "\f133",
+    "lungs": "\f134",
+);
+
+.flaticon-location:before {
+    content: map-get($flaticon-map, "location");
+}
+.flaticon-phone-call:before {
+    content: map-get($flaticon-map, "phone-call");
+}
+.flaticon-heart:before {
+    content: map-get($flaticon-map, "heart");
+}
+.flaticon-shopping-cart:before {
+    content: map-get($flaticon-map, "shopping-cart");
+}
+.flaticon-menu:before {
+    content: map-get($flaticon-map, "menu");
+}
+.flaticon-call:before {
+    content: map-get($flaticon-map, "call");
+}
+.flaticon-phone:before {
+    content: map-get($flaticon-map, "phone");
+}
+.flaticon-envelope:before {
+    content: map-get($flaticon-map, "envelope");
+}
+.flaticon-message:before {
+    content: map-get($flaticon-map, "message");
+}
+.flaticon-clipboard:before {
+    content: map-get($flaticon-map, "clipboard");
+}
+.flaticon-calendar:before {
+    content: map-get($flaticon-map, "calendar");
+}
+.flaticon-event:before {
+    content: map-get($flaticon-map, "event");
+}
+.flaticon-man:before {
+    content: map-get($flaticon-map, "man");
+}
+.flaticon-user:before {
+    content: map-get($flaticon-map, "user");
+}
+.flaticon-group:before {
+    content: map-get($flaticon-map, "group");
+}
+.flaticon-teamwork:before {
+    content: map-get($flaticon-map, "teamwork");
+}
+.flaticon-team:before {
+    content: map-get($flaticon-map, "team");
+}
+.flaticon-back:before {
+    content: map-get($flaticon-map, "back");
+}
+.flaticon-arrow:before {
+    content: map-get($flaticon-map, "arrow");
+}
+.flaticon-tick:before {
+    content: map-get($flaticon-map, "tick");
+}
+.flaticon-close:before {
+    content: map-get($flaticon-map, "close");
+}
+.flaticon-accept:before {
+    content: map-get($flaticon-map, "accept");
+}
+.flaticon-menu-1:before {
+    content: map-get($flaticon-map, "menu-1");
+}
+.flaticon-upload:before {
+    content: map-get($flaticon-map, "upload");
+}
+.flaticon-next:before {
+    content: map-get($flaticon-map, "next");
+}
+.flaticon-download:before {
+    content: map-get($flaticon-map, "download");
+}
+.flaticon-back-1:before {
+    content: map-get($flaticon-map, "back-1");
+}
+.flaticon-back-2:before {
+    content: map-get($flaticon-map, "back-2");
+}
+.flaticon-airplane:before {
+    content: map-get($flaticon-map, "airplane");
+}
+.flaticon-air-freight:before {
+    content: map-get($flaticon-map, "air-freight");
+}
+.flaticon-home:before {
+    content: map-get($flaticon-map, "home");
+}
+.flaticon-doctor:before {
+    content: map-get($flaticon-map, "doctor");
+}
+.flaticon-medicine:before {
+    content: map-get($flaticon-map, "medicine");
+}
+.flaticon-health-check:before {
+    content: map-get($flaticon-map, "health-check");
+}
+.flaticon-doctor-1:before {
+    content: map-get($flaticon-map, "doctor-1");
+}
+.flaticon-heart-1:before {
+    content: map-get($flaticon-map, "heart-1");
+}
+.flaticon-stethoscope:before {
+    content: map-get($flaticon-map, "stethoscope");
+}
+.flaticon-pills:before {
+    content: map-get($flaticon-map, "pills");
+}
+.flaticon-medical-record:before {
+    content: map-get($flaticon-map, "medical-record");
+}
+.flaticon-heartbeat:before {
+    content: map-get($flaticon-map, "heartbeat");
+}
+.flaticon-pharmacy:before {
+    content: map-get($flaticon-map, "pharmacy");
+}
+.flaticon-ambulance:before {
+    content: map-get($flaticon-map, "ambulance");
+}
+.flaticon-ambulance-1:before {
+    content: map-get($flaticon-map, "ambulance-1");
+}
+.flaticon-ambulance-2:before {
+    content: map-get($flaticon-map, "ambulance-2");
+}
+.flaticon-hospital:before {
+    content: map-get($flaticon-map, "hospital");
+}
+.flaticon-hospital-1:before {
+    content: map-get($flaticon-map, "hospital-1");
+}
+.flaticon-hospital-bed:before {
+    content: map-get($flaticon-map, "hospital-bed");
+}
+.flaticon-hospital-2:before {
+    content: map-get($flaticon-map, "hospital-2");
+}
+.flaticon-mail:before {
+    content: map-get($flaticon-map, "mail");
+}
+.flaticon-teeth:before {
+    content: map-get($flaticon-map, "teeth");
+}
+.flaticon-eye:before {
+    content: map-get($flaticon-map, "eye");
+}
+.flaticon-lungs:before {
+    content: map-get($flaticon-map, "lungs");
+}

@@ -1,0 +1,9 @@
+.ellipse-container {
+position: relative;
+overflow: hidden;
+}
+
+.moving-div {
+position: absolute;
+border-radius: 50%;
+}

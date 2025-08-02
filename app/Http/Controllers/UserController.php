@@ -1,0 +1,165 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Role;
+use App\Models\User;
+use Illuminate\View\View;
+use App\Models\Collaborator;
+use Illuminate\Http\Request;
+use App\Services\MoodleService;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Collection;
+
+class UserController extends Controller
+{
+    public function userProfileView($id): View
+    {
+        $user = User::with('collaborator')->findOrFail($id);
+
+        if (!$user) {
+            return back();
+        }
+
+        $role = Role::with('abilities')->findOrFail($user->role_id);
+        $abilities = $role->abilities;
+        //dd($abilities);
+
+        $history = MoodleService::historyByUser($user->moodle_user_id);
+        $history = new Collection($history);
+
+        return view('user.profile', compact('user', 'abilities', 'history'));
+    }
+
+    public function userListView(): View
+    {
+        $users = User::with('collaborator')->orderBy('name')->get();
+        //dd($users);
+        return view('user.list', compact('users'));
+    }
+
+    public function userEditView($id): View
+    {
+        $roles = Role::orderBy('name')->where('status', true)->get();
+        $user = User::with('collaborator')->findOrFail($id);
+        if (!$user) {
+            return back();
+        }
+
+        return view('user.edit', compact('user', 'roles'));
+    }
+
+    public function userRegisterView(): View
+    {
+        $roles = Role::orderBy('name')->where('status', true)->get();
+
+        return view('user.register', compact('roles'));
+    }
+
+    public function permission()
+    {
+        $users = User::with('collaborator')->orderBy('name')->get();
+        // dd($users);
+        return view('user.permission-list', compact('users'));
+    }
+
+    public function setpermission($id)
+    {
+        $user = User::with('collaborator')->findOrFail($id);
+        if ($user->access_level == 'client') {
+            $user->access_level = 'admin';
+        } else {
+            $user->access_level = 'client';
+        }
+        $user->save();
+
+        return response()->json(['users' => $user], 200);
+    }
+
+    public function edit($id, Request $request)
+    {
+        $user = User::with('collaborator')->findOrFail($id);
+
+        $user->name = strtoupper($request->name);
+        $user->gender = $request->gender;
+        $user->email = $request->email;
+        $user->age = $request->age;
+        $user->cpf = preg_replace('/[^0-9]/', '', $request->cpf);
+        $user->phone = preg_replace('/[^0-9]/', '', $request->phone);
+
+        if ($request->hasFile('image')) {
+            $imagem = $request->file('image');
+            $user->image = $imagem->store('users', 'public');
+        }
+
+        //update role
+        $user->role_id = $request->role;
+
+        if ($request->jobrole && $request->department) {
+            if ($user->collaborator == null) {
+                $collaborator = new Collaborator();
+
+                $collaborator->job_role = $request->jobrole;
+                $collaborator->department = $request->department;
+
+                $collaborator->user()->associate($user);
+                $collaborator->save();
+            } else {
+                $user->collaborator->job_role = $request->jobrole;
+                $user->collaborator->department = $request->department;
+
+                $user->collaborator->save();
+            }
+        } else {
+            if ($user->collaborator != null) {
+                $user->collaborator->delete();
+            }
+        }
+
+        $user->save();
+
+        return redirect()->route('user.list.view');
+    }
+
+    public function store(Request $request)
+    {
+        $user = new User();
+
+        $user->name = strtoupper($request->name);
+        $user->gender = $request->gender;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->age = $request->age;
+        $user->cpf = preg_replace('/[^0-9]/', '', $request->cpf);
+        $user->phone = preg_replace('/[^0-9]/', '', $request->phone);
+
+        if ($request->hasFile('image')) {
+            $imagem = $request->file('image');
+            $user->image = $imagem->store('users', 'public');
+        }
+
+        $user->save();
+
+        return redirect()->route('user.list.view');
+    }
+
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+
+        $user->delete();
+
+        return redirect()->route('user.list.view');
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('id'); 
+
+        $users = User::select('id', 'name')->where('tenant_id', $query)->get();
+
+        return response()->json($users);
+    }
+}
