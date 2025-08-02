@@ -19,4 +19,19 @@ class Menu extends Model
         'url',
         'icon',    
     ];
+
+    public function subMenus()
+    {
+        return $this->hasMany(SubMenu::class);
+    }
+
+    public function menuUsersTypes()
+    {
+        return $this->hasMany(MenuUsersType::class);
+    }
+
+    public function userTypes()
+    {
+        return $this->belongsToMany(UserType::class, 'menu_users_types', 'menu_id', 'user_type_id');
+    }
 }

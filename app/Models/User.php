@@ -21,11 +21,17 @@ class User extends Authenticatable
         'cpf',
         'phone',
         'role_id',
-        'tenant_id'
+        'tenant_id',
+        'user_type_id'
     ];
 
     public function collaborator(): HasOne
     {
         return $this->hasOne(Collaborator::class);
+    }
+
+    public function userType(): BelongsTo
+    {
+        return $this->belongsTo(UserType::class, 'user_type_id');
     }
 }

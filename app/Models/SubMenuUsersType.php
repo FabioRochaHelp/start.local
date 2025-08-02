@@ -19,19 +19,13 @@ class SubMenuUsersType extends Model
         'user_type_id',
     ];
 
-    /**
-     * Get the sub-menu that owns the user type.
-     */
     public function subMenu()
     {
-        return $this->belongsTo(SubMenu::class);
+        return $this->belongsTo(SubMenu::class, 'sub_menu_id', 'id');
     }
 
-    /**
-     * Get the user type that owns the sub-menu.
-     */
     public function userType()
     {
-        return $this->belongsTo(UserType::class);        
+        return $this->belongsTo(UserType::class, 'user_type_id', 'id');
     }
 }

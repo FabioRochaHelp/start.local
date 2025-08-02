@@ -29,5 +29,13 @@ class SubMenu extends Model
         return $this->belongsTo(Menu::class);
     }
 
-    
+    public function subMenuUsersTypes()
+    {
+        return $this->hasMany(SubMenuUsersType::class);
+    }
+
+    public function userTypes()
+    {
+        return $this->belongsToMany(UserType::class, 'sub_menu_users_types', 'sub_menu_id', 'user_type_id');
+    }
 }

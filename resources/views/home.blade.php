@@ -2,16 +2,16 @@
     <!-- Body Content Wrapper -->
 
     <div class="ms-content-wrapper">
-        @can('show_home')
+       
             <div class="row">
 
                 <div class="col-xl-3 col-md-6 col-sm-6">
-                    <a href="{{ route('doctor.list.view') }}">
+                    <a href="">
                         <div class="ms-card card-gradient-custom ms-widget ms-infographics-widget ms-p-relative">
                             <div class="ms-card-body media">
                                 <div class="media-body">
                                     <h6>Médicos</h6>
-                                    <p class="ms-card-change"> {{ $doctors }}</p>
+                                    <p class="ms-card-change"> 1500</p>
                                 </div>
                             </div>
                             <i class="fas fa-stethoscope ms-icon-mr"></i>
@@ -23,8 +23,8 @@
                         <div class="ms-card card-gradient-custom ms-widget ms-infographics-widget ms-p-relative">
                             <div class="ms-card-body media">
                                 <div class="media-body">
-                                    <h6>Colaboradores</h6>
-                                    <p class="ms-card-change"> {{ $users }}</p>
+                                    <h6>Cooperados</h6>
+                                    <p class="ms-card-change"> 25035</p>
                                 </div>
                             </div>
                             <i class="fas fa-user-plus ms-icon-mr"></i>
@@ -36,8 +36,8 @@
                         <div class="ms-card card-gradient-custom ms-widget ms-infographics-widget ms-p-relative">
                             <div class="ms-card-body media">
                                 <div class="media-body">
-                                    <h6 class="bold">Pacientes</h6>
-                                    <p class="ms-card-change"> {{ $patients }}</p>
+                                    <h6 class="bold">Titulares</h6>
+                                    <p class="ms-card-change"> 50000</p>
                                 </div>
                             </div>
                             <i class="fa fa-wheelchair ms-icon-mr"></i>
@@ -45,12 +45,12 @@
                     </a>
                 </div>
                 <div class="col-xl-3 col-md-6 col-sm-6">
-                    <a href="{{ route('iras.list.view') }}">
+                    <a href="">
                         <div class="ms-card card-gradient-custom ms-widget ms-infographics-widget ms-p-relative">
                             <div class="ms-card-body media">
                                 <div class="media-body">
-                                    <h6 class="bold">IRAS - Ocorrências</h6>
-                                    <p class="ms-card-change"> {{ $iras }}</p>
+                                    <h6 class="bold">Dependentes</h6>
+                                    <p class="ms-card-change">120500 </p>
                                 </div>
                             </div>
                             <i class="fas fa-briefcase-medical ms-icon-mr"></i>
@@ -109,17 +109,8 @@
                             </div>
                         </div>
                         <div class="ms-panel-body d-flex justify-content-between p-5 ms-medical-overview-slider">
-                            @foreach ($doctorsIras as $doctorIra)
-                                <div class="ms-crypto-overview">
-                                    <a href="#" class="ms-profile">
-                                        <img src="../../avatar/{{ $doctorIra['avatar'] }}"
-                                            class="ms-img-large ms-img-round ms-user-img mx-auto d-block" alt="people" title="{{$doctorIra['doctor_name']}}">
-                                        <div class="ms-card-body">
-                                            <h5>{{$doctorIra['total']}}</h5>
-                                        </div>
-                                    </a>
-                                </div>
-                            @endforeach
+                        
+                               
                         </div>
                     </div>
                 </div>
@@ -158,7 +149,6 @@
                     </div>
                 </div>
             </div>
-        @endcan
     </div>
 </x-layout>
 
