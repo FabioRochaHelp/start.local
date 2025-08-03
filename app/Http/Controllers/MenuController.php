@@ -14,6 +14,8 @@ class MenuController extends Controller
     public function index()
     {
         //
+        $menus = Menu::all(); // Fetch all menus from the database
+        return view('menu.list', compact('menus')); // Return the view with menus
     }
 
     /**

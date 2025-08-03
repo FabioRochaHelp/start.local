@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\MenuController;
 
 Route::get('/health', function () {
     return response()->json(['status' => 'ok']);
@@ -33,26 +34,35 @@ Route::controller(LoginController::class)->group(function () {
 Route::middleware('auth')->group(function () {
 
     Route::controller(InstitutionController::class)->group(function () {
-        Route::get('/institution/list', 'institutionListView')->name('institution.list.view')->middleware('can:list_institution');
-        Route::get('/institution/register', 'institutionRegisterView')->name('institution.register.view')->middleware('can:add_institution');
-        Route::post('/institution/register', 'store')->name('institution.register.form')->middleware('can:add_institution');
-        Route::get('/institution/edit/{id}', 'institutionEditView')->name('institution.edit.view')->middleware('can:edit_institution');
-        Route::post('/institution/edit/{id}', 'edit')->name('institution.edit.form')->middleware('can:edit_institution');
-        Route::get('/institution/show/{id}', 'show')->name('institution.show')->middleware('can:list_institution');
-        Route::get('/institution/delete/{id}', 'destroy')->name('institution.delete')->middleware('can:delete_institution');
+        Route::get('/institution/list', 'institutionListView')->name('institution.list.view');
+        Route::get('/institution/register', 'institutionRegisterView')->name('institution.register.view');
+        Route::post('/institution/register', 'store')->name('institution.register.form');
+        Route::get('/institution/edit/{id}', 'institutionEditView')->name('institution.edit.view');
+        Route::post('/institution/edit/{id}', 'edit')->name('institution.edit.form');
+        Route::get('/institution/show/{id}', 'show')->name('institution.show');
+        Route::get('/institution/delete/{id}', 'destroy')->name('institution.delete');
     });
 
     Route::controller(UserController::class)->group(function () {
-        Route::get('/user/profile/{id}', 'userProfileView')->name('user.profile.view')->middleware('can:acess_profile');
-        Route::get('/user/list', 'userListView')->name('user.list.view')->middleware('can:list_user');
-        Route::get('/user/register', 'userRegisterView')->name('user.register.view')->middleware('can:add_user');
-        Route::post('/user/register', 'store')->name('user.register.form')->middleware('can:add_user');
-        Route::get('/user/edit/{id}', 'userEditView')->name('user.edit.view')->middleware('can:edit_user');
-        Route::post('/user/edit/{id}', 'edit')->name('user.edit.form')->middleware('can:edit_user');
-        Route::get('/user/permission', 'permission')->name('user.permission.view')->middleware('can:access');
-        Route::get('/user/setpermission/{id}', 'setpermission')->name('setpermission')->middleware('can:access');
-        Route::get('/user/delete/{id}', 'destroy')->name('user.delete')->middleware('can:delete_user');
-        Route::get('/user/search', 'search')->name('user.search')->middleware('can:list_user');
+        Route::get('/user/profile/{id}', 'userProfileView')->name('user.profile.view');
+        Route::get('/users', 'userListView')->name('users');
+        Route::get('/user/register', 'userRegisterView')->name('user.register.view');
+        Route::post('/user/register', 'store')->name('user.register.form');
+        Route::get('/user/edit/{id}', 'userEditView')->name('user.edit.view');
+        Route::post('/user/edit/{id}', 'edit')->name('user.edit.form');
+        Route::get('/user/permission', 'permission')->name('user.permission.view');
+        Route::get('/user/setpermission/{id}', 'setpermission')->name('setpermission');
+        Route::get('/user/delete/{id}', 'destroy')->name('user.delete');
+        Route::get('/user/search', 'search')->name('user.search');
     });
 
+    Route::controller(MenuController::class)->group(function () {
+        Route::get('/menu', 'index')->name('menu');
+        Route::get('/menu/register', 'registerView')->name('menu.register.view');
+        Route::post('/menu/register', 'store')->name('menu.register.form');
+        Route::get('/menu/edit/{id}', 'editView')->name('menu.edit.view');
+        Route::post('/menu/edit/{id}', 'edit')->name('menu.edit.form');
+        Route::get('/menu/delete/{id}', 'destroy')->name('menu.delete');
+    });
+    
 });

@@ -15,9 +15,7 @@
                 <div class="ms-panel">
                     <div class="ms-panel-header ms-panel-custome">
                         <h6>Lista de Usuários</h6>
-                        @can('add_user')
                             <a href="{{ route("user.register.view") }}" class="ms-text-primary">Adicionar Usuário</a>
-                        @endcan
                     </div>
                     <div class="ms-panel-body">
                         <div class="table-responsive">

@@ -5,26 +5,11 @@
         <span class="ms-toggler-bar bg-white"></span>
     </div>
 
-    @php
-        if (auth()->user()->tenant_id)
-        {
-            $institution = \App\Models\Institution::where('tenant_id', auth()->user()->tenant_id)->first();
-
-            if ($institution->image)
-                $logoPath = tenant_asset($institution->image);
-
-            if (auth()->user()->image)
-                $avatarPath = tenant_asset(auth()->user()->image);
-            else
-                $avatarPath = null;
-        }
-    @endphp
-    
     <div class="docfind-logo d-none d-xl-block">
-        <a class="ps-0 ms-0 text-center" href="{{ route('home.view') }}"> <img src="{{ $logoPath ?? asset('landpage/img/logo-light.png') }}" alt="logo"></a>
+        <a class="ps-0 ms-0 text-center" href="{{ route('home.view') }}"> <img src="{{ $logoPath ?? asset('assets/img/medboard-logo-216x62.png') }}" alt="logo"></a>
     </div>
     <div class="logo-sn logo-sm ms-d-block-sm">        
-        <a class="ps-0 ms-0 text-center navbar-brand me-0" href="/"><img src="{{ $logoPath ?? asset('landpage/img/logo-light.png') }}" alt="logo"></a>
+        <a class="ps-0 ms-0 text-center navbar-brand me-0" href="/"><img src="{{ $logoPath ?? asset('assets/img/medboard-logo-216x62.png') }}" alt="logo"></a>
     </div>
     <ul class="ms-nav-list ms-inline mb-0" id="ms-nav-options">
 

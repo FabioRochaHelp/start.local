@@ -14,14 +14,8 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $user = auth()->user();
 
-        $menus = Menu::all();
-
-        return view('home', [
-            'menus' => $menus,
-            'user' => $user,
-        ]);
+        return view('home');
     }
 
     public function landpage()

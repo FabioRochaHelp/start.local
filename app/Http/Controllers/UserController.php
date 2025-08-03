@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\View\View;
-use App\Models\Collaborator;
 use Illuminate\Http\Request;
-use App\Services\MoodleService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -35,20 +33,19 @@ class UserController extends Controller
 
     public function userListView(): View
     {
-        $users = User::with('collaborator')->orderBy('name')->get();
+        $users = User::orderBy('name')->get();
         //dd($users);
         return view('user.list', compact('users'));
     }
 
     public function userEditView($id): View
     {
-        $roles = Role::orderBy('name')->where('status', true)->get();
-        $user = User::with('collaborator')->findOrFail($id);
+        $user = User::findOrFail($id);
         if (!$user) {
             return back();
         }
 
-        return view('user.edit', compact('user', 'roles'));
+        return view('user.edit', compact('user'));
     }
 
     public function userRegisterView(): View

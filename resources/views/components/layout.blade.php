@@ -43,11 +43,10 @@
     <x-pre-loader></x-pre-loader>
     <!-- Sidebar Navigation Left -->
     <x-navigation-sidebar></x-navigation-sidebar>
-
     <!-- Main Content -->
     <main class="body-content">
-        <!-- Navigation Bar -->
         <x-navigation-navbar></x-navigation-navbar>
+        
         <!-- Body Content Wrapper -->
         {{ $slot }}
     </main>

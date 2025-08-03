@@ -49,51 +49,53 @@
     </style>
 </head>
 
-<x-layout title='Editar Usuário'>
+<x-layout title='Adicionar Usuário'>
     <div class="ms-content-wrapper">
         <div class="row">
             <div class="col-md-12">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb ps-0">
-                        <li class="breadcrumb-item"><i class="fa fa-chart-bar"></i> <a
-                            href="{{ route('home.view') }}">Dashboard</a> </li>
-                        <li class="breadcrumb-item"> Cadastros </li>
+                        <li class="breadcrumb-item"><i class="material-icons">home</i> <a
+                            href="{{ route('home.view') }}">Home</a> </li>
+                        <li class="breadcrumb-item"> Gerenciamento </li>
                         <li class="breadcrumb-item"> Usuário </li>
-                        <li class="breadcrumb-item active" aria-current="page">Editar</li>
+                        <li class="breadcrumb-item active" aria-current="page">Adicionar</li>
                     </ol>
                 </nav>
             </div>
             <div class="col-xl-12 col-md-12">
                 <div class="ms-panel">
                     <div class="ms-panel-header ms-panel-custome">
-                        <h6>Editar Usuário de Id: {{ $user->id }}</h6>
-                        <a href="{{ route('users') }}" class="ms-text-primary">Lista de Usuários</a>
+                        <h6>Adicionar Usuário</h6>
+                        <a href="{{ route('user.list.view') }}" class="ms-text-primary">Lista de Usuários</a>
                     </div>
                     <div class="ms-panel-body">
-                        <form class="needs-validation" method="POST" action="{{ route('user.edit.form', ['id'=>$user->id]) }}" enctype="multipart/form-data">
+                        <form class="needs-validation" method="POST" action="{{ route('user.register.form') }}" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
                                 <div class="col-md-12 mb-2">
                                     <label for="validationCustom6">Tipo de Usuário</label>
                                     <div class="input-group">
-                                        <select name="role" class="form-control" id="validationCustom6" required>
-                                            
+                                        <select class="form-control" id="validationCustom6" name="role_id" required>
+                                            @foreach ($roles as $role)
+                                                <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                            @endforeach
                                         </select>
 
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-4 mb-3">
                                     <label for="validationCustom002">CPF</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="validationCustom002" placeholder="Insira o CPF do usuário" name="cpf" value="{{ $user->cpf }}" required>
+                                        <input type="text" class="form-control cpf_cnpj" id="validationCustom002" placeholder="CPF" name="cpf" required>
                                     </div>
                                 </div>
-                                <div class="col-md-6 mb-2">
+                                <div class="col-md-8 mb-2">
                                     <label for="validationCustom001">Nome</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="validationCustom001" placeholder="Insira o nome do usuário" name="name" value="{{ $user->name}}" required>
+                                        <input type="text" class="form-control" id="validationCustom001" placeholder="Nome" name="name" required>
                                     </div>
                                 </div>
                             </div>
@@ -101,52 +103,46 @@
                                 <div class="col-md-4 mb-3">
                                     <label id="validationCustom003">Idade</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="validationCustom003" placeholder="Insira a idade do usuário" name="age" value="{{ $user->age }}" required>
+                                        <input type="text" class="form-control" id="validationCustom003" placeholder="Idade" name="age" required>
                                     </div>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    @if ($user->gender == 'F')
-                                        <label>Sexo</label>
-                                        <ul class="ms-list d-flex">
-                                            <li class="ms-list-item">
-                                                <label class="ms-checkbox-wrap">
-                                                <input type="radio" name="gender" value="F" checked>
-                                                <i class="ms-checkbox-check"></i>
-                                                </label>
-                                                <span> Feminino </span>
-                                            </li>
-                                            <li class="ms-list-item ps-0">
-                                                <label class="ms-checkbox-wrap">
-                                                <input type="radio" name="gender" value="M">
-                                                <i class="ms-checkbox-check"></i>
-                                                </label>
-                                                <span> Masculino </span>
-                                            </li>
-                                        </ul>
-                                    @else
-                                        <label>Sexo</label>
-                                        <ul class="ms-list d-flex">
-                                            <li class="ms-list-item">
-                                                <label class="ms-checkbox-wrap">
-                                                <input type="radio" name="gender" value="F" >
-                                                <i class="ms-checkbox-check"></i>
-                                                </label>
-                                                <span> Feminino </span>
-                                            </li>
-                                            <li class="ms-list-item ps-0">
-                                                <label class="ms-checkbox-wrap">
-                                                <input type="radio" name="gender" value="M" checked>
-                                                <i class="ms-checkbox-check"></i>
-                                                </label>
-                                                <span> Masculino </span>
-                                            </li>
-                                        </ul>
-                                    @endif
+                                    <label>Sexo</label>
+                                    <ul class="ms-list d-flex">
+                                        <li class="ms-list-item">
+                                            <label class="ms-checkbox-wrap">
+                                            <input type="radio" name="gender" value="F">
+                                            <i class="ms-checkbox-check"></i>
+                                            </label>
+                                            <span> Feminino </span>
+                                        </li>
+                                        <li class="ms-list-item ps-0">
+                                            <label class="ms-checkbox-wrap">
+                                            <input type="radio" name="gender" value="M">
+                                            <i class="ms-checkbox-check"></i>
+                                            </label>
+                                            <span> Masculino </span>
+                                        </li>
+                                    </ul>
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label for="validationCustom010">Telefone</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="validationCustom010" placeholder="Insira o telefone do usuário" name="phone" value="{{ $user->phone }}" required>
+                                        <input type="text" class="form-control telefone" id="validationCustom010" placeholder="Telefone" name="phone" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="validationCustom006">Cargo</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="validationCustom006" placeholder="Cargo, deixe vazio para usuarios sem cargo" name="jobrole" value="">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label for="validationCustom007">Departamento</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="validationCustom007" placeholder="Departamento, deixe vazio para usuarios sem departamento" name="department" value="">
                                     </div>
                                 </div>
                             </div>
@@ -154,10 +150,18 @@
                                 <div class="col-md-6 mb-3">
                                     <label for="validationCustom004">Email</label>
                                     <div class="input-group">
-                                        <input type="email" class="form-control" id="validationCustom004" placeholder="Insira o email do usuário" name="email" value="{{ $user->email }}" required>
+                                        <input type="email" class="form-control" id="validationCustom004" placeholder="Email" name="email" required>
                                     </div>
                                 </div>
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-6 mb-2">
+                                    <label for="validationCustom005">Senha</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="validationCustom005" placeholder="Senha" name="password" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
                                     <label>Foto de Perfil</label>
                                     <div class="input-group">
                                         <input type="file" name="image" class="form-control" id="validatedCustomFileUser" accept="image/*" onchange="carregarImagem(this)">
@@ -178,9 +182,24 @@
                                     </div>
                                 </div>
                             </div>
+                            
 
-                            <a href="{{ route('users') }}" class="btn btn-warning">Cancelar</a>
-                            <button class="btn btn-primary" type="submit">Editar</button>
+                            {{--<div id="meuModal" class="modal">
+                                <div class="modal-content">
+                                    <span class="close" onclick="fecharModal()">&times;</span>
+                                    <div class="modal-body">
+                                        <img id="imagemOriginal" src="#" alt="Imagem Original" style="max-width: 100%;">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" onclick="recortarImagem()">Recortar</button>
+                                        <button type="button" class="btn btn-warning" data-dismiss="modal">Cancelar</button>
+                                    </div>
+                                </div>
+                            </div>--}}
+
+
+                            <button class="btn btn-warning mt-4 d-inline w-20" type="reset">Limpar</button>
+                            <button class="btn btn-primary mt-4 d-inline w-20" type="submit">Adicionar</button>
                         </form>
                     </div>
                 </div>
@@ -188,6 +207,7 @@
         </div>
     </div>
 </x-layout>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
 <script>
     // Função para converter data URI em Blob
     function dataURItoBlob(dataURI) {
@@ -247,4 +267,18 @@
         var modal = document.getElementById('meuModal');
         modal.style.display = 'none';
     }
+    $(".cpf_cnpj").mask("000.000.000-00", {
+        onKeyPress: function(cpfcnpj, e, field, options) {
+            var masks = ['000.000.000-000', '00.000.000/0000-00'];
+            var mask = (cpfcnpj.length > 14) ? masks[1] : masks[0];
+            $('.cpf_cnpj').mask(mask, options);
+        }
+    });
+    $(".telefone").mask("(00) 0000-00009", {
+        onKeyPress: function(telefone, e, field, options) {
+            var masks = ['(00) 00000-0000', '(00) 0000-00009'];
+            var mask = (telefone.replace(/\D/g, '').length > 10) ? masks[0] : masks[1];
+            $('.telefone').mask(mask, options);
+        }
+    });
 </script>

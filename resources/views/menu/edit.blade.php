@@ -55,9 +55,9 @@
             <div class="col-md-12">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb ps-0">
-                        <li class="breadcrumb-item"><i class="fa fa-chart-bar"></i> <a
-                            href="{{ route('home.view') }}">Dashboard</a> </li>
-                        <li class="breadcrumb-item"> Cadastros </li>
+                        <li class="breadcrumb-item"><i class="material-icons">home</i> <a
+                            href="{{ route('home.view') }}">Home</a> </li>
+                        <li class="breadcrumb-item"> Gerenciamento </li>
                         <li class="breadcrumb-item"> Usuário </li>
                         <li class="breadcrumb-item active" aria-current="page">Editar</li>
                     </ol>
@@ -67,7 +67,7 @@
                 <div class="ms-panel">
                     <div class="ms-panel-header ms-panel-custome">
                         <h6>Editar Usuário de Id: {{ $user->id }}</h6>
-                        <a href="{{ route('users') }}" class="ms-text-primary">Lista de Usuários</a>
+                        <a href="{{ route('user.list.view') }}" class="ms-text-primary">Lista de Usuários</a>
                     </div>
                     <div class="ms-panel-body">
                         <form class="needs-validation" method="POST" action="{{ route('user.edit.form', ['id'=>$user->id]) }}" enctype="multipart/form-data">
@@ -77,7 +77,9 @@
                                     <label for="validationCustom6">Tipo de Usuário</label>
                                     <div class="input-group">
                                         <select name="role" class="form-control" id="validationCustom6" required>
-                                            
+                                            @foreach ($roles as $role)
+                                                <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                            @endforeach
                                         </select>
 
                                     </div>
@@ -150,6 +152,37 @@
                                     </div>
                                 </div>
                             </div>
+                            @if ($user->collaborator == null)
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="validationCustom006">Cargo</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="validationCustom006" placeholder="Insira o cargo do usuário ou deixe vazio para usuarios sem cargo" name="jobrole" value="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-2">
+                                        <label for="validationCustom007">Departamento</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="validationCustom007" placeholder="Insira o departamento do usuário ou deixe vazio para usuarios sem departamento" name="department" value="">
+                                        </div>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="validationCustom006">Cargo</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="validationCustom006" placeholder="Insira o cargo do usuário ou deixe vazio para usuarios sem cargo" name="jobrole" value="{{ $user->collaborator->job_role }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-2">
+                                        <label for="validationCustom007">Departamento</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="validationCustom007" placeholder="Insira o departamento do usuário ou deixe vazio para usuarios sem departamento" name="department" value="{{ $user->collaborator->department }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="validationCustom004">Email</label>
@@ -179,7 +212,7 @@
                                 </div>
                             </div>
 
-                            <a href="{{ route('users') }}" class="btn btn-warning">Cancelar</a>
+                            <a href="{{ route('user.list.view') }}" class="btn btn-warning">Cancelar</a>
                             <button class="btn btn-primary" type="submit">Editar</button>
                         </form>
                     </div>
