@@ -37,7 +37,7 @@
                         @if ($menu->subMenus && $menu->subMenus->count() > 0)
                             @foreach ($menu->subMenus as $subMenu)
                                 <li>
-                                    <a href="{{ $subMenu->url }}">
+                                    <a href="{{ route($subMenu->url) }}">
                                         @if ($subMenu->icon)
                                             <i class="{{ $subMenu->icon }}"></i>
                                         @endif
