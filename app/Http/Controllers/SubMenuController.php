@@ -5,15 +5,18 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreSubMenuRequest;
 use App\Http\Requests\UpdateSubMenuRequest;
 use App\Models\SubMenu;
+use App\Models\Menu;
 
 class SubMenuController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Menu $menu)
     {
-        //
+        $subMenus = Menu::with('subMenus')->get();
+        return view('submenu.list', compact('menu')); // Return the view with menus
+        
     }
 
     /**

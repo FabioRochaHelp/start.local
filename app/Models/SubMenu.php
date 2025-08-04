@@ -9,6 +9,9 @@ class SubMenu extends Model
 {
     use HasFactory;
 
+    protected $table = 'sub_menus';
+
+
     /**
      * The attributes that are mass assignable.
      *
@@ -37,5 +40,10 @@ class SubMenu extends Model
     public function userTypes()
     {
         return $this->belongsToMany(UserType::class, 'sub_menu_users_types', 'sub_menu_id', 'user_type_id');
+    }
+
+    public function hasPermission($userTypeId)
+    {
+        return $this->userTypes()->where('user_type_id', $userTypeId)->exists();
     }
 }

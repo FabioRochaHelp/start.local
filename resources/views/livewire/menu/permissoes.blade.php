@@ -23,7 +23,7 @@
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li class="ms-dropdown-list">
-                                            <a class="media p-2" href="#">
+                                            <a class="media p-2" href="{{route('submenu.list', ['menu' => $menu->id])}}">
                                                 <div class="media-body">
                                                     <span>Submenu</span>
                                                 </div>

@@ -86,13 +86,28 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 
-
     <script>
-        $(document).ready(function() {
+        document.addEventListener('DOMContentLoaded', function() {
             @if (Session::has('toast_message'))
                 toastr.options.positionClass = "toast-top-right";
-                toastr.{{ Session::get('toast_type') }}("{{ Session::get('toast_message') }}");
+                toastr["{{ Session::get('toast_type') }}"]("{{ Session::get('toast_message') }}");
             @endif
+
+            window.addEventListener('toast', event => {
+
+                // Se event.detail for um array, pegamos o primeiro item
+                const data = Array.isArray(event.detail) ? event.detail[0] : event.detail;
+
+                const type = data.type || 'info'; // Se `type` for indefinido, usa 'info'
+                const message = data.message || 'Mensagem padrão';
+
+                if (typeof toastr[type] === 'function') {
+                    toastr.options.positionClass = "toast-top-right";
+                    toastr[type](message);
+                } else {
+                    console.error(`Tipo de toast inválido: ${type}`);
+                }
+            });
         });
     </script>
 </body>

@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\SubMenuController;
 
 Route::get('/health', function () {
     return response()->json(['status' => 'ok']);
@@ -63,6 +64,15 @@ Route::middleware('auth')->group(function () {
         Route::get('/menu/edit/{id}', 'editView')->name('menu.edit.view');
         Route::post('/menu/edit/{id}', 'edit')->name('menu.edit.form');
         Route::get('/menu/delete/{id}', 'destroy')->name('menu.delete');
+    });
+
+    Route::controller(SubMenuController::class)->group(function () {
+        Route::get('/submenu/list/{menu}', 'index')->name('submenu.list');
+        Route::get('/submenu/register/{menu}', 'create')->name('submenu.register.view');
+        Route::post('/submenu/register/{menu}', 'store')->name('submenu.register.form');
+        Route::get('/submenu/edit/{id}', 'edit')->name('submenu.edit.view');
+        Route::post('/submenu/edit/{id}', 'update')->name('submenu.edit.form');
+        Route::get('/submenu/delete/{id}', 'destroy')->name('submenu.delete');
     });
     
 });

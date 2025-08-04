@@ -8,7 +8,7 @@
                         <li class="breadcrumb-item"><i class="fa fa-chart-bar"></i> <a
                             href="{{ route('home.view') }}">Dashboard</a> </li>
                         <li class="breadcrumb-item"> Configurações </li>
-                        <li class="breadcrumb-item"> Permissões </li>
+                        <li class="breadcrumb-item"><a href="{{ route("menu") }}">Permissões</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Menus</li>
                     </ol>
                 </nav>
