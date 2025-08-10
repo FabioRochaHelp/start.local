@@ -32,7 +32,7 @@ Route::controller(LoginController::class)->group(function () {
 });
 
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth'])->group(function () {
 
     Route::controller(InstitutionController::class)->group(function () {
         Route::get('/institution/list', 'institutionListView')->name('institution.list.view');

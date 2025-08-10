@@ -23,27 +23,36 @@
         @if (isset($menus) && $menus->count() > 0)
             @foreach ($menus as $menu)
                 <li class="menu-item">
-                    <a href="#" class="has-chevron" data-bs-toggle="collapse"
-                        data-bs-target="#manage{{ $menu->id }}" aria-expanded="false"
-                        aria-controls="manage{{ $menu->id }}">
-                        <span>
-                            @if ($menu->icon)
-                                <i class="{{ $menu->icon }}"></i>
-                            @endif
-                            </i> {{ $menu->name }}
-                        </span>
-                    </a>
+                    @if (auth()->user()->user_type_id !== null &&
+                            $menuUsersTypes->pluck('user_type_id')->contains(auth()->user()->user_type_id) &&
+                            $menuUsersTypes->pluck('menu_id')->contains($menu->id))
+                        <a href="#" class="has-chevron" data-bs-toggle="collapse"
+                            data-bs-target="#manage{{ $menu->id }}" aria-expanded="false"
+                            aria-controls="manage{{ $menu->id }}">
+                            <span>
+                                @if ($menu->icon)
+                                    <i class="{{ $menu->icon }}"></i>
+                                @endif
+                                </i> {{ $menu->name }}
+                            </span>
+                        </a>
+                    @endif
+
                     <ul id="manage{{ $menu->id }}" class="collapse list-unstyled">
                         @if ($menu->subMenus && $menu->subMenus->count() > 0)
                             @foreach ($menu->subMenus as $subMenu)
-                                <li>
-                                    <a href="{{ route($subMenu->url) }}">
-                                        @if ($subMenu->icon)
-                                            <i class="{{ $subMenu->icon }}"></i>
-                                        @endif
-                                        {{ $subMenu->name }}
-                                    </a>
-                                </li>
+                                @if (auth()->user()->user_type_id !== null &&
+                                        $subMenuUsersTypes->pluck('user_type_id')->contains(auth()->user()->user_type_id) &&
+                                        $subMenuUsersTypes->pluck('sub_menu_id')->contains($subMenu->id))
+                                    <li>
+                                        <a href="{{ route($subMenu->url) }}">
+                                            @if ($subMenu->icon)
+                                                <i class="{{ $subMenu->icon }}"></i>
+                                            @endif
+                                            {{ $subMenu->name }}
+                                        </a>
+                                    </li>
+                                @endif
                             @endforeach
                         @endif
                     </ul>

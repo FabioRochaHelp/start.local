@@ -34,4 +34,9 @@ class Menu extends Model
     {
         return $this->belongsToMany(UserType::class, 'menu_users_types', 'menu_id', 'user_type_id');
     }
+
+    public function hasPermission($userTypeId)
+    {
+        return $this->userTypes()->where('user_type_id', $userTypeId)->exists();
+    }
 }

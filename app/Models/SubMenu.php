@@ -46,4 +46,9 @@ class SubMenu extends Model
     {
         return $this->userTypes()->where('user_type_id', $userTypeId)->exists();
     }
+
+    public function hasPermissionByRoute($route)
+    {
+        return $this->where('url', $route)->hasPermissionByUser(auth()->user()->user_type_id)->exists();
+    }
 }

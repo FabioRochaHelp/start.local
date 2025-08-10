@@ -47,13 +47,16 @@
 
                             @foreach ($types as $type)
                                 <td>
-                                    <div class="form-check">
-                                        <label class="ms-switch">
-                                            <input type="checkbox" checked="">
-                                            <span class="ms-switch-slider ms-switch-danger round"></span>
-                                        </label>
-                                    </div>
-                                </td>
+                                        <div class="form-check">
+                                            <label class="ms-switch">
+                                                <input type="checkbox"
+                                                    {{ $menu->hasPermission($type->id) ? 'checked' : '' }}
+                                                    wire:click="togglePermissao({{ $menu->id }}, {{ $type->id }}, $event.target.checked)">
+                                                <span class="ms-switch-slider ms-switch-danger round"></span>
+                                            </label>
+
+                                        </div>
+                                    </td>
                             @endforeach
                         </tr>
                     @endforeach
