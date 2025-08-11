@@ -18,6 +18,10 @@ class Permissoes extends Component
     public $types;
     public $type;
     public $subMenuUsersTypes;
+    public $name;
+    public $url;
+    public $menuId;
+    public $icon;
 
     /**
      * Create a new component instance.
@@ -30,13 +34,14 @@ class Permissoes extends Component
     {
         $this->menus = $this->getMenus();
         $this->subMenus = $this->menu ? $this->menu->subMenus : [];
+        $this->menuId = $this->menu ? $this->menu->id : null;
         $this->types = UserType::all();
         $this->subMenuUsersTypes = SubMenuUsersType::all();
     }
 
     public function save()
     {
-       /*  $this->validate([
+        /*  $this->validate([
             'name' => 'required|exists:menus,id',
             'subMenu' => 'required|exists:sub_menus,id',
         ]); */
@@ -52,6 +57,39 @@ class Permissoes extends Component
         $this->subMenus = $this->menu ? $this->menu->subMenus : [];
         $this->subMenuUsersTypes = SubMenuUsersType::where('sub_menu_id', $this->subMenu)->get();
         $this->dispatch('refreshSubMenuList'); // Dispatch an event to refresh the submenu list
+    }
+
+    public function createSubmenu()
+    {
+        $this->validate([
+            'name' => ['required', function ($attribute, $value, $fail) {
+                if (SubMenu::where('menu_id', $this->menuId)->where('name', $value)->exists()) {
+                    $fail('O submenu ' . $value . ' já existe para este menu.');
+                }
+            }],
+            'url' => ['required', function ($attribute, $value, $fail) {
+                if (SubMenu::where('menu_id', $this->menuId)->where('url', $value)->exists()) {
+                    $fail('A url ' . $value . ' já existe para este menu.');
+                }
+            }],
+        ]);
+
+        SubMenu::create([
+            'name' => $this->name,
+            'url' => $this->url,
+            'icon' => $this->icon,
+            'menu_id' => $this->menuId,
+        ]);
+
+        $this->dispatch('toast', [
+            'message' => 'Submenu criado com sucesso!',
+            'type' => 'success',
+        ]);
+
+        $this->reset(['name', 'url']);
+        $this->subMenus = $this->menu ? $this->menu->subMenus : [];
+
+        $this->dispatch('closeModal', id: 'report1');
     }
 
     public function getMenus()

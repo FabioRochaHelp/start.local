@@ -13,6 +13,9 @@ class Permissoes extends Component
     public $menu;
     public $types;
     public $type;
+    public $name;
+    public $url;
+    public $icon;
 
     /**
      * Create a new component instance.
@@ -25,6 +28,34 @@ class Permissoes extends Component
     {
         $this->menus = $this->getMenus();
         $this->types = UserType::all();
+    }
+
+    public function save()
+    {
+        $this->validate([
+            'name' => ['required', function ($attribute, $value, $fail) {
+                if (Menu::where('name', $value)->exists()) {
+                    $fail('O menu ' . $value . ' já existe.');
+                }
+            }],
+        ]);
+
+       Menu::create([
+            'name' => $this->name,
+            'url' => $this->url,
+            'icon' => $this->icon,
+        ]);
+
+        $this->dispatch('toast', [
+            'message' => 'Menu atualizado com sucesso!',
+            'type' => 'success',
+        ]);
+
+        $this->reset(['name', 'url', 'icon']);
+        $this->menus = $this->getMenus();
+
+         $this->dispatch('closeModal', id: 'report1');
+        
     }
 
     public function getMenus()

@@ -1,52 +1,62 @@
 <div>
-    <div class="ms-panel-body">
-        <div class="table-responsive">
-            <table class="table table-striped thead-primary">
-                <th>Ícone</th>
-                <th>Menu</th>
-                <th>Rota</th>
-                @foreach ($types as $type)
-                    <th>{{ $type->name }}</th>
-                @endforeach
-                @if ($menus->count() == 0)
-                    Nenhum menu cadastrado
-                @else
-                    @foreach ($menus as $menu)
-                        <tr>
-                            <td> <i class="{{ $menu->icon }}"></i> </td>
-                            <td>{{ $menu->name }} 
+    <div class="ms-panel">
+        <div class="ms-panel-header ms-panel-custome">
+            <h6>Lista de Menus</h6>
+            <!-- Botão para abrir o modal -->
 
-                                <div class="dropdown float-end">
-                                    <a href="#" data-bs-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">
-                                        <i class="material-icons">more_vert</i>
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-end">
-                                        <li class="ms-dropdown-list">
-                                            <a class="media p-2" href="{{route('submenu.list', ['menu' => $menu->id])}}">
-                                                <div class="media-body">
-                                                    <span>Submenu</span>
-                                                </div>
-                                            </a>
-                                            <a class="media p-2" href="#">
-                                                <div class="media-body">
-                                                    <span>Editar</span>
-                                                </div>
-                                            </a>
-                                            <a class="media p-2" href="#">
-                                                <div class="media-body">
-                                                    <span>Desativar</span>
-                                                </div>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#report1">
+                Adicionar Menu
+            </button>
+        </div>
+        <div class="ms-panel-body">
+            <div class="table-responsive">
+                <table class="table table-striped thead-primary">
+                    <th>Ícone</th>
+                    <th>Menu</th>
+                    <th>Rota</th>
+                    @foreach ($types as $type)
+                        <th>{{ $type->name }}</th>
+                    @endforeach
+                    @if ($menus->count() == 0)
+                        Nenhum menu cadastrado
+                    @else
+                        @foreach ($menus as $menu)
+                            <tr>
+                                <td> <i class="{{ $menu->icon }}"></i> </td>
+                                <td>{{ $menu->name }}
 
-                            </td>
-                            <td>{{ $menu->route }}</td>
+                                    <div class="dropdown float-end">
+                                        <a href="#" data-bs-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                            <i class="material-icons">more_vert</i>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li class="ms-dropdown-list">
+                                                <a class="media p-2"
+                                                    href="{{ route('submenu.list', ['menu' => $menu->id]) }}">
+                                                    <div class="media-body">
+                                                        <span>Submenu</span>
+                                                    </div>
+                                                </a>
+                                                <a class="media p-2" href="#">
+                                                    <div class="media-body">
+                                                        <span>Editar</span>
+                                                    </div>
+                                                </a>
+                                                <a class="media p-2" href="#">
+                                                    <div class="media-body">
+                                                        <span>Desativar</span>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
 
-                            @foreach ($types as $type)
-                                <td>
+                                </td>
+                                <td>{{ $menu->route }}</td>
+
+                                @foreach ($types as $type)
+                                    <td>
                                         <div class="form-check">
                                             <label class="ms-switch">
                                                 <input type="checkbox"
@@ -57,11 +67,82 @@
 
                                         </div>
                                     </td>
-                            @endforeach
-                        </tr>
-                    @endforeach
-                @endif
-            </table>
+                                @endforeach
+                            </tr>
+                        @endforeach
+                    @endif
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="report1" tabindex="-1" style="display: none;" aria-hidden="true" wire:ignore.self>
+        <div class="modal-dialog ms-modal-dialog-width">
+            <div class="modal-content ms-modal-content-width">
+                <div class="modal-header ms-modal-header-radius-0">
+                    <h4 class="modal-title text-white">Adicionar Menu</h4>
+                    <button type="button" class="close text-white" data-bs-dismiss="modal"
+                        aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body p-0 text-start">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="ms-panel ms-panel-bshadow-none">
+                            <div class="ms-panel-header">
+                                <h6>Informações do Submenu</h6>
+                            </div>
+                            <div class="ms-panel-body">
+                                <form wire:submit.prevent="save">
+                                    <input type="hidden" wire:model="menuId">
+
+                                    <div class="row">
+                                        {{-- Campo Nome --}}
+                                        <div class="col-md-4 mb-3">
+                                            <label for="menuIcon">Ícone</label>
+                                            <input type="text" id="menuIcon" class="form-control"
+                                                placeholder="Ícone" wire:model="icon">
+                                        </div>
+                                        {{-- Campo Nome --}}
+                                        <div class="col-md-4 mb-3">
+                                            <label for="menuName">Nome do Menu</label>
+                                            <input type="text" id="menuName"
+                                                class="form-control @error('name') is-invalid @enderror"
+                                                placeholder="Nome" wire:model="name">
+                                            @error('name')
+                                                <span class="">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+
+                                        {{-- Campo URL --}}
+                                        <div class="col-md-4 mb-3">
+                                            <label for="menuRoute">Rota</label>
+                                            <input type="text" id="menuRoute"
+                                                class="form-control @error('url') is-invalid @enderror"
+                                                placeholder="ex: submenu.index" wire:model="url">
+                                            @error('url')
+                                                <span class="">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary mt-4">Salvar</button>
+                                    <button type="button" class="btn btn-secondary mt-4"
+                                        data-bs-dismiss="modal">Cancelar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('livewire:initialized', () => {
+        Livewire.on('closeModal', (data) => {
+            const modalEl = document.getElementById(data.id);
+            const modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+            modalInstance.hide();
+        });
+    });
+</script>
+

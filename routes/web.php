@@ -42,6 +42,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/institution/edit/{id}', 'edit')->name('institution.edit.form');
         Route::get('/institution/show/{id}', 'show')->name('institution.show');
         Route::get('/institution/delete/{id}', 'destroy')->name('institution.delete');
+        Route::get('/teste/search', 'search')->name('teste.index');
     });
 
     Route::controller(UserController::class)->group(function () {
