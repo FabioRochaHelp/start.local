@@ -9,8 +9,8 @@
             </button>
         </div>
         <div class="ms-panel-body">
-            <div class="table-responsive">
-                <table class="table table-striped thead-primary">
+            <div class="table">
+                <table class="table thead-primary">
                     <th>Ícone</th>
                     <th>Menu</th>
                     <th>Rota</th>
@@ -38,14 +38,9 @@
                                                         <span>Submenu</span>
                                                     </div>
                                                 </a>
-                                                <a class="media p-2" href="#">
+                                                <a class="media p-2" wire:click="edit({{ $menu->id }})">
                                                     <div class="media-body">
                                                         <span>Editar</span>
-                                                    </div>
-                                                </a>
-                                                <a class="media p-2" href="#">
-                                                    <div class="media-body">
-                                                        <span>Desativar</span>
                                                     </div>
                                                 </a>
                                             </li>
@@ -80,7 +75,7 @@
         <div class="modal-dialog ms-modal-dialog-width">
             <div class="modal-content ms-modal-content-width">
                 <div class="modal-header ms-modal-header-radius-0">
-                    <h4 class="modal-title text-white">Adicionar Menu</h4>
+                    <h4 class="modal-title text-white">{{ $editing ? 'Editar Menu' : 'Adicionar Menu' }}</h4>
                     <button type="button" class="close text-white" data-bs-dismiss="modal"
                         aria-hidden="true">×</button>
                 </div>
@@ -88,7 +83,7 @@
                     <div class="col-xl-12 col-md-12">
                         <div class="ms-panel ms-panel-bshadow-none">
                             <div class="ms-panel-header">
-                                <h6>Informações do Submenu</h6>
+                                <h6>Informações do Menu</h6>
                             </div>
                             <div class="ms-panel-body">
                                 <form wire:submit.prevent="save">
@@ -144,5 +139,12 @@
             modalInstance.hide();
         });
     });
+    document.addEventListener('livewire:initialized', () => {
+        Livewire.on('openModal', (data) => {
+            const modalEl = document.getElementById(data.id);
+            const modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+            modalInstance.show();
+        });
+    })
 </script>
 

@@ -18,10 +18,13 @@ class Permissoes extends Component
     public $types;
     public $type;
     public $subMenuUsersTypes;
+    public $subMenuName;
     public $name;
     public $url;
+    public $subMenuId;
     public $menuId;
     public $icon;
+    public $editing = false;
 
     /**
      * Create a new component instance.
@@ -46,9 +49,6 @@ class Permissoes extends Component
             'subMenu' => 'required|exists:sub_menus,id',
         ]); */
 
-        // Logic to save the permissions
-        // This could involve saving the selected subMenu and types to the database
-
         $this->dispatch('toast', [
             'message' => 'Permissões salvas com sucesso!',
             'type' => 'success',
@@ -56,40 +56,65 @@ class Permissoes extends Component
         $this->reset(['menu', 'subMenu', 'type']);
         $this->subMenus = $this->menu ? $this->menu->subMenus : [];
         $this->subMenuUsersTypes = SubMenuUsersType::where('sub_menu_id', $this->subMenu)->get();
-        $this->dispatch('refreshSubMenuList'); // Dispatch an event to refresh the submenu list
+        $this->dispatch('refreshSubMenuList');
     }
 
     public function createSubmenu()
     {
         $this->validate([
-            'name' => ['required', function ($attribute, $value, $fail) {
-                if (SubMenu::where('menu_id', $this->menuId)->where('name', $value)->exists()) {
-                    $fail('O submenu ' . $value . ' já existe para este menu.');
-                }
-            }],
-            'url' => ['required', function ($attribute, $value, $fail) {
-                if (SubMenu::where('menu_id', $this->menuId)->where('url', $value)->exists()) {
-                    $fail('A url ' . $value . ' já existe para este menu.');
-                }
-            }],
+            'subMenuName' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    if (SubMenu::where('menu_id', $this->menuId)->where('name', $value)->exists()) {
+                        $fail('O submenu ' . $value . ' já existe para este menu.');
+                    }
+                },
+            ],
+            'url' => [
+                'required'
+            ],
         ]);
 
-        SubMenu::create([
-            'name' => $this->name,
-            'url' => $this->url,
-            'icon' => $this->icon,
-            'menu_id' => $this->menuId,
-        ]);
+        SubMenu::updateOrCreate(
+            [
+                'id' => $this->subMenuId,
+            ],
+
+            [
+                'name' => $this->subMenuName,
+                'url' => $this->url,
+                'icon' => $this->icon,
+                'menu_id' => $this->menuId,
+            ],
+        );
+
+        $message = $this->subMenuId ? 'Submenu atualizado com sucesso!' : 'Submenu criado com sucesso!';
 
         $this->dispatch('toast', [
-            'message' => 'Submenu criado com sucesso!',
+            'message' => $message,
             'type' => 'success',
         ]);
 
-        $this->reset(['name', 'url']);
+        $this->reset(['subMenuName', 'url', 'icon']);
+        $this->menus = $this->getMenus();
         $this->subMenus = $this->menu ? $this->menu->subMenus : [];
+        $this->menuId = $this->menu ? $this->menu->id : null;
 
         $this->dispatch('closeModal', id: 'report1');
+    }
+
+    public function edit($id)
+    {
+        $subMenu = SubMenu::with('menu')->find($id);
+        $this->subMenuId = $subMenu->id;
+        $this->menu = $subMenu->menu;
+        $this->subMenuName = $subMenu->name;
+        $this->url = $subMenu->url;
+        $this->icon = $subMenu->icon;
+        $this->menuId = $subMenu->menu_id;
+        $this->editing = true;
+
+        $this->dispatch('openModal', id: 'report1');
     }
 
     public function getMenus()

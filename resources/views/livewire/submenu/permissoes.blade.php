@@ -1,7 +1,7 @@
 <div>
     <div class="ms-panel">
         <div class="ms-panel-header ms-panel-custome">
-            <h6>Lista de Submenus - {{ $menu->name }}</h6>
+            <h6>Lista de Submenus - {{ $menu->name ?? '—' }}</h6>
             <!-- Botão para abrir o modal -->
 
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#report1">
@@ -9,8 +9,8 @@
             </button>
         </div>
         <div class="ms-panel-body">
-            <div class="table-responsive">
-                <table class="table table-striped thead-primary">
+            <div class="table">
+                <table class="table thead-primary ">
                     <th>Ícone</th>
                     <th>Submenu</th>
                     <th>Rota</th>
@@ -32,14 +32,9 @@
                                         </a>
                                         <ul class="dropdown-menu dropdown-menu-end">
                                             <li class="ms-dropdown-list">
-                                                <a class="media p-2" href="#">
+                                                <a class="media p-2" wire:click="edit({{ $subMenu->id }})">
                                                     <div class="media-body">
                                                         <span>Editar</span>
-                                                    </div>
-                                                </a>
-                                                <a class="media p-2" href="#">
-                                                    <div class="media-body">
-                                                        <span>Desativar</span>
                                                     </div>
                                                 </a>
                                             </li>
@@ -73,7 +68,7 @@
         <div class="modal-dialog ms-modal-dialog-width">
             <div class="modal-content ms-modal-content-width">
                 <div class="modal-header ms-modal-header-radius-0">
-                    <h4 class="modal-title text-white">Adicionar Submenu</h4>
+                    <h4 class="modal-title text-white">{{ $editing ? 'Editar Submenu' : 'Adicionar Submenu' }}</h4>
                     <button type="button" class="close text-white" data-bs-dismiss="modal"
                         aria-hidden="true">×</button>
                 </div>
@@ -85,14 +80,14 @@
                             </div>
                             <div class="ms-panel-body">
                                 <form wire:submit.prevent="createSubmenu">
+                                    <input type="hidden" wire:model="subMenuId">
                                     <input type="hidden" wire:model="menuId">
 
                                     <div class="row">
-                                         {{-- Campo Nome --}}
+                                        {{-- Campo Nome --}}
                                         <div class="col-md-4 mb-3">
                                             <label for="submenuIcon">Ícone</label>
-                                            <input type="text" id="submenuIcon"
-                                                class="form-control"
+                                            <input type="text" id="submenuIcon" class="form-control"
                                                 placeholder="Ícone" wire:model="icon">
                                         </div>
                                         {{-- Campo Nome --}}
@@ -100,7 +95,7 @@
                                             <label for="submenuName">Nome do Submenu</label>
                                             <input type="text" id="submenuName"
                                                 class="form-control @error('name') is-invalid @enderror"
-                                                placeholder="Nome" wire:model="name">
+                                                placeholder="Nome" wire:model="subMenuName">
                                             @error('name')
                                                 <span class="">{{ $message }}</span>
                                             @enderror
@@ -138,4 +133,12 @@
             modalInstance.hide();
         });
     });
+    document.addEventListener('livewire:initialized', () => {
+        Livewire.on('openModal', (data) => {
+            const modalEl = document.getElementById(data.id);
+            const modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+            modalInstance.show();
+        });
+    })
 </script>
+

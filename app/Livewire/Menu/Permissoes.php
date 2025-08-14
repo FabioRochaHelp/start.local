@@ -9,6 +9,7 @@ use App\Models\MenuUsersType;
 
 class Permissoes extends Component
 {
+    public $menuId = null;
     public $menus;
     public $menu;
     public $types;
@@ -16,6 +17,7 @@ class Permissoes extends Component
     public $name;
     public $url;
     public $icon;
+    public $editing = false;
 
     /**
      * Create a new component instance.
@@ -33,18 +35,24 @@ class Permissoes extends Component
     public function save()
     {
         $this->validate([
-            'name' => ['required', function ($attribute, $value, $fail) {
-                if (Menu::where('name', $value)->exists()) {
-                    $fail('O menu ' . $value . ' já existe.');
-                }
-            }],
+            'name' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    if (Menu::where('name', $value)->exists()) {
+                        $fail('O menu ' . $value . ' já existe.');
+                    }
+                },
+            ],
         ]);
 
-       Menu::create([
-            'name' => $this->name,
-            'url' => $this->url,
-            'icon' => $this->icon,
-        ]);
+        Menu::updateOrCreate(
+            ['id' => $this->menuId], 
+            [
+                'name' => $this->name,
+                'url' => $this->url,
+                'icon' => $this->icon,
+            ], 
+        );
 
         $this->dispatch('toast', [
             'message' => 'Menu atualizado com sucesso!',
@@ -54,15 +62,26 @@ class Permissoes extends Component
         $this->reset(['name', 'url', 'icon']);
         $this->menus = $this->getMenus();
 
-         $this->dispatch('closeModal', id: 'report1');
-        
+        $this->dispatch('closeModal', id: 'report1');
+    }
+
+    public function edit($id)
+    {
+        $menu = Menu::find($id);
+        $this->menuId = $menu->id;
+        $this->name = $menu->name;
+        $this->url = $menu->url;
+        $this->icon = $menu->icon;
+        $this->editing = true;
+
+        $this->dispatch('openModal', id: 'report1');
     }
 
     public function getMenus()
     {
-        // Logic to fetch menus from the database or any other source
+       
         $this->menus = Menu::all();
-    }   
+    }
 
     public function addPermissoes($menu, $type)
     {
