@@ -34,20 +34,9 @@ Route::controller(LoginController::class)->group(function () {
 
 Route::middleware(['auth'])->group(function () {
 
-    Route::controller(InstitutionController::class)->group(function () {
-        Route::get('/institution/list', 'institutionListView')->name('institution.list.view');
-        Route::get('/institution/register', 'institutionRegisterView')->name('institution.register.view');
-        Route::post('/institution/register', 'store')->name('institution.register.form');
-        Route::get('/institution/edit/{id}', 'institutionEditView')->name('institution.edit.view');
-        Route::post('/institution/edit/{id}', 'edit')->name('institution.edit.form');
-        Route::get('/institution/show/{id}', 'show')->name('institution.show');
-        Route::get('/institution/delete/{id}', 'destroy')->name('institution.delete');
-        Route::get('/teste/search', 'search')->name('teste.index');
-    });
-
     Route::controller(UserController::class)->group(function () {
         Route::get('/user/profile/{id}', 'userProfileView')->name('user.profile.view');
-        Route::get('/users', 'userListView')->name('users');
+        Route::get('/users', 'index')->name('users');
         Route::get('/user/register', 'userRegisterView')->name('user.register.view');
         Route::post('/user/register', 'store')->name('user.register.form');
         Route::get('/user/edit/{id}', 'userEditView')->name('user.edit.view');
@@ -56,6 +45,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/user/setpermission/{id}', 'setpermission')->name('setpermission');
         Route::get('/user/delete/{id}', 'destroy')->name('user.delete');
         Route::get('/user/search', 'search')->name('user.search');
+        Route::get('test', 'test')->name('teste.index');
     });
 
     Route::controller(MenuController::class)->group(function () {

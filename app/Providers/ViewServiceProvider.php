@@ -21,7 +21,6 @@ class ViewServiceProvider extends ServiceProvider
 
         View::share('menuUsersTypes', $menuUsersTypes);
         View::share('subMenuUsersTypes', $subMenuUsersTypes);
-        // Compartilha $menus com todas as views
         View::composer('*', function ($view) {
             $view->with('menus', Menu::with('subMenus')->get());
         });

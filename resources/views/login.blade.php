@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Login - CCIH 4 Web</title>
+    <title>Login - STARTKIT</title>
     <!-- Iconic Fonts -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="{{ asset('/vendors/iconic-fonts/font-awesome/css/all.min.css') }} " rel="stylesheet">
@@ -52,7 +52,7 @@
                                 </div>
                             @endif
                             <div class="text-center mb-5">
-                                <img src="{{ asset('landpage/img/logo-ligth-verde.png') }}" width="200" alt="">
+                                <img src="" width="200" alt="">
                             </div>
                          
                             <h1>Login</h1>

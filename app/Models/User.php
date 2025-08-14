@@ -20,15 +20,14 @@ class User extends Authenticatable
         'age',
         'cpf',
         'phone',
-        'role_id',
-        'tenant_id',
-        'user_type_id'
+        'user_type_id',
+        'created_at',
     ];
 
-    public function collaborator(): HasOne
-    {
-        return $this->hasOne(Collaborator::class);
-    }
+    protected $casts = [
+      'created_at' => 'datetime:d/m/Y',
+    ];
+
 
     public function userType(): BelongsTo
     {

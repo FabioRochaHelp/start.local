@@ -20,12 +20,11 @@
                 <span><i class="fa fa-chart-bar"></i>Dashboard</span>
             </a>
         </li>
-        @if (isset($menus) && $menus->count() > 0)
+        @if (!empty($menus) && $menus->count())
             @foreach ($menus as $menu)
-                <li class="menu-item">
-                    @if (auth()->user()->user_type_id !== null &&
-                            $menuUsersTypes->pluck('user_type_id')->contains(auth()->user()->user_type_id) &&
-                            $menuUsersTypes->pluck('menu_id')->contains($menu->id))
+                @if (auth()->check() &&
+                        $menuUsersTypes->contains(fn($item) => $item->user_type_id === auth()->user()->user_type_id && $item->menu_id === $menu->id))
+                    <li class="menu-item">
                         <a href="#" class="has-chevron" data-bs-toggle="collapse"
                             data-bs-target="#manage{{ $menu->id }}" aria-expanded="false"
                             aria-controls="manage{{ $menu->id }}">
@@ -33,31 +32,31 @@
                                 @if ($menu->icon)
                                     <i class="{{ $menu->icon }}"></i>
                                 @endif
-                                </i> {{ $menu->name }}
+                                {{ $menu->name }}
                             </span>
                         </a>
-                    @endif
 
-                    <ul id="manage{{ $menu->id }}" class="collapse list-unstyled">
-                        @if ($menu->subMenus && $menu->subMenus->count() > 0)
-                            @foreach ($menu->subMenus as $subMenu)
-                                @if (auth()->user()->user_type_id !== null &&
-                                        $subMenuUsersTypes->pluck('user_type_id')->contains(auth()->user()->user_type_id) &&
-                                        $subMenuUsersTypes->pluck('sub_menu_id')->contains($subMenu->id))
-                                    <li>
-                                        <a href="{{ route($subMenu->url) }}">
-                                            @if ($subMenu->icon)
-                                                <i class="{{ $subMenu->icon }}"></i>
-                                            @endif
-                                            {{ $subMenu->name }}
-                                        </a>
-                                    </li>
-                                @endif
-                            @endforeach
+                        @if ($menu->subMenus && $menu->subMenus->count())
+                            <ul id="manage{{ $menu->id }}" class="collapse list-unstyled">
+                                @foreach ($menu->subMenus as $subMenu)
+                                    @if (auth()->check() &&
+                                            $subMenuUsersTypes->contains(fn($item) => $item->user_type_id === auth()->user()->user_type_id && $item->sub_menu_id === $subMenu->id))
+                                        <li>
+                                            <a href="{{ route($subMenu->url) }}">
+                                                @if ($subMenu->icon)
+                                                    <i class="{{ $subMenu->icon }}"></i>
+                                                @endif
+                                                {{ $subMenu->name }}
+                                            </a>
+                                        </li>
+                                    @endif
+                                @endforeach
+                            </ul>
                         @endif
-                    </ul>
-                </li>
+                    </li>
+                @endif
             @endforeach
         @endif
+
     </ul>
 </aside>

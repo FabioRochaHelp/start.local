@@ -67,7 +67,7 @@
                 <div class="ms-panel">
                     <div class="ms-panel-header ms-panel-custome">
                         <h6>Adicionar Usuário</h6>
-                        <a href="{{ route('user.list.view') }}" class="ms-text-primary">Lista de Usuários</a>
+                        <a href="{{ route('users') }}" class="ms-text-primary">Lista de Usuários</a>
                     </div>
                     <div class="ms-panel-body">
                         <form class="needs-validation" method="POST" action="{{ route('user.register.form') }}" enctype="multipart/form-data">
@@ -76,7 +76,7 @@
                                 <div class="col-md-12 mb-2">
                                     <label for="validationCustom6">Tipo de Usuário</label>
                                     <div class="input-group">
-                                        <select class="form-control" id="validationCustom6" name="role_id" required>
+                                        <select class="form-control" id="user_type_id" name="user_type_id" required>
                                             @foreach ($roles as $role)
                                                 <option value="{{ $role->id }}">{{ $role->name }}</option>
                                             @endforeach

@@ -11,30 +11,24 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Collection;
 
+use App\Models\UserType;
+
 class UserController extends Controller
 {
     public function userProfileView($id): View
     {
-        $user = User::with('collaborator')->findOrFail($id);
+        $user = User::findOrFail($id);
 
         if (!$user) {
             return back();
         }
 
-        $role = Role::with('abilities')->findOrFail($user->role_id);
-        $abilities = $role->abilities;
-        //dd($abilities);
-
-        $history = MoodleService::historyByUser($user->moodle_user_id);
-        $history = new Collection($history);
-
-        return view('user.profile', compact('user', 'abilities', 'history'));
+        return view('user.profile', compact('user'));
     }
 
-    public function userListView(): View
+    public function index(): View
     {
-        $users = User::orderBy('name')->get();
-        //dd($users);
+        $users = User::with('userType')->orderBy('name')->get();
         return view('user.list', compact('users'));
     }
 
@@ -50,8 +44,7 @@ class UserController extends Controller
 
     public function userRegisterView(): View
     {
-        $roles = Role::orderBy('name')->where('status', true)->get();
-
+        $roles = UserType::all();
         return view('user.register', compact('roles'));
     }
 
@@ -77,9 +70,10 @@ class UserController extends Controller
 
     public function edit($id, Request $request)
     {
-        $user = User::with('collaborator')->findOrFail($id);
+        $user = User::with('userType')->findOrFail($id);
 
         $user->name = strtoupper($request->name);
+        $user->userType = $request->user_type_id;
         $user->gender = $request->gender;
         $user->email = $request->email;
         $user->age = $request->age;
@@ -91,33 +85,9 @@ class UserController extends Controller
             $user->image = $imagem->store('users', 'public');
         }
 
-        //update role
-        $user->role_id = $request->role;
-
-        if ($request->jobrole && $request->department) {
-            if ($user->collaborator == null) {
-                $collaborator = new Collaborator();
-
-                $collaborator->job_role = $request->jobrole;
-                $collaborator->department = $request->department;
-
-                $collaborator->user()->associate($user);
-                $collaborator->save();
-            } else {
-                $user->collaborator->job_role = $request->jobrole;
-                $user->collaborator->department = $request->department;
-
-                $user->collaborator->save();
-            }
-        } else {
-            if ($user->collaborator != null) {
-                $user->collaborator->delete();
-            }
-        }
-
         $user->save();
 
-        return redirect()->route('user.list.view');
+        return redirect()->route('users');
     }
 
     public function store(Request $request)
@@ -125,6 +95,7 @@ class UserController extends Controller
         $user = new User();
 
         $user->name = strtoupper($request->name);
+        $user->user_type_id = $request->user_type_id;       
         $user->gender = $request->gender;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
@@ -139,7 +110,7 @@ class UserController extends Controller
 
         $user->save();
 
-        return redirect()->route('user.list.view');
+        return redirect()->route('users');
     }
 
     public function destroy($id)
@@ -148,7 +119,7 @@ class UserController extends Controller
 
         $user->delete();
 
-        return redirect()->route('user.list.view');
+        return redirect()->route('users');
     }
 
     public function search(Request $request)
