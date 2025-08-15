@@ -30,7 +30,7 @@
             <h1>Erro 403</h1>
             <h3>Opa! Você não tem acesso a este recurso!</h3>
             <p>O link que você está seguindo não pode ser acessado, entre em contato com seu gerente!</p>
-            <a href="/" class="btn btn-white"> <i class="material-icons">arrow_back</i> Voltar ao Inicio</a>
+            <a href="javascript:history.back()" class="btn btn-white"> <i class="material-icons">arrow_back</i> Voltar</a>
          </div>
       </main>
       <!-- SCRIPTS -->

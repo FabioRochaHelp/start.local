@@ -22,6 +22,7 @@ class SubMenu extends Model
         'url',
         'icon',
         'menu_id',
+        'direct',
     ];
 
     /**

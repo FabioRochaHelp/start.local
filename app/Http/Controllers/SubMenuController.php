@@ -14,9 +14,9 @@ class SubMenuController extends Controller
      */
     public function index(Menu $menu)
     {
+        
         $subMenus = Menu::with('subMenus')->get();
         return view('submenu.list', compact('menu')); // Return the view with menus
-        
     }
 
     /**

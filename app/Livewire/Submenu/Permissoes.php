@@ -21,6 +21,7 @@ class Permissoes extends Component
     public $subMenuName;
     public $name;
     public $url;
+    public $direct = true;
     public $subMenuId;
     public $menuId;
     public $icon;
@@ -63,12 +64,7 @@ class Permissoes extends Component
     {
         $this->validate([
             'subMenuName' => [
-                'required',
-                function ($attribute, $value, $fail) {
-                    if (SubMenu::where('menu_id', $this->menuId)->where('name', $value)->exists()) {
-                        $fail('O submenu ' . $value . ' já existe para este menu.');
-                    }
-                },
+                'required'
             ],
             'url' => [
                 'required'
@@ -85,6 +81,7 @@ class Permissoes extends Component
                 'url' => $this->url,
                 'icon' => $this->icon,
                 'menu_id' => $this->menuId,
+                'direct' => $this->direct
             ],
         );
 
@@ -112,6 +109,7 @@ class Permissoes extends Component
         $this->url = $subMenu->url;
         $this->icon = $subMenu->icon;
         $this->menuId = $subMenu->menu_id;
+        $this->direct = $subMenu->direct;
         $this->editing = true;
 
         $this->dispatch('openModal', id: 'report1');

@@ -111,6 +111,13 @@
                                                 <span class="">{{ $message }}</span>
                                             @enderror
                                         </div>
+                                        {{-- Campo Direct --}}
+                                        <div class="form-check">
+                                            <label class="ms-switch">
+                                                <input type="checkbox" wire:model="direct">
+                                                <span class="ms-switch-slider ms-switch-danger round"></span>
+                                            </label>
+                                        </div>
                                     </div>
 
                                     <button type="submit" class="btn btn-primary mt-4">Salvar</button>
@@ -141,4 +148,3 @@
         });
     })
 </script>
-

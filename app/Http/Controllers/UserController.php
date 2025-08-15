@@ -1,8 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
@@ -28,6 +26,8 @@ class UserController extends Controller
 
     public function index(): View
     {
+        $this->authorizeMenuAccess('users');
+
         $users = User::with('userType')->orderBy('name')->get();
         return view('user.list', compact('users'));
     }
@@ -70,6 +70,8 @@ class UserController extends Controller
 
     public function edit($id, Request $request)
     {
+
+
         $user = User::with('userType')->findOrFail($id);
 
         $user->name = strtoupper($request->name);

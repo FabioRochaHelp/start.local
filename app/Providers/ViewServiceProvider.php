@@ -22,7 +22,18 @@ class ViewServiceProvider extends ServiceProvider
         View::share('menuUsersTypes', $menuUsersTypes);
         View::share('subMenuUsersTypes', $subMenuUsersTypes);
         View::composer('*', function ($view) {
-            $view->with('menus', Menu::with('subMenus')->get());
+            $view->with(
+                'menus',
+                Menu::with([
+                    'subMenus' => function ($query) {
+                        $query->where('direct', 1);
+                    },
+                ])
+                    ->whereHas('subMenus', function ($query) {
+                        $query->where('direct', 1);
+                    })
+                    ->get(),
+            );
         });
     }
 }
