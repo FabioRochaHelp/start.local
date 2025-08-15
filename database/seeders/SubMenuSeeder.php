@@ -14,13 +14,12 @@ class SubMenuSeeder extends Seeder
     {
         //
         $subMenus = [
-            ['name' => 'SubMenu 1', 'url' => '/submenu1', 'icon' => 'bar', 'menu_id' => 1],
-            [
-                'name' => 'SubMenu 2',
-                'url' => '/submenu2',
-                'icon' => 'sub2',
-                'menu_id' => 1,
-            ],
+            ['name' => 'Permissões', 'url' => 'menu', 'icon' => 'fa fa-bar', 'menu_id' => 1],
         ];
+
+        foreach ($subMenus as $subMenu) {
+            \App\Models\SubMenu::create($subMenu);
+        }
+
     }
 }

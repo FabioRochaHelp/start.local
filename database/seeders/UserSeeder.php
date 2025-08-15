@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
         User::updateOrCreate(
             [
                 'name' => 'Admin - StartKit',
-                'email' => 'admin@' . env('APP_DOMAIN'),
+                'email' => 'admin@localhost.com',
                 'age' => 0,
                 'cpf' => 0,
                 'password' => Hash::make('password'),

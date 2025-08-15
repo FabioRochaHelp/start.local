@@ -13,5 +13,13 @@ class SubMenuUsersTypeSeeder extends Seeder
     public function run(): void
     {
         //
+        $subMenuUsersTypes = [
+            ['sub_menu_id' => 1, 'user_type_id' => 1],
+        ];
+
+        foreach ($subMenuUsersTypes as $subMenuUserType) {
+            \App\Models\SubMenuUsersType::create($subMenuUserType);
+        }
+        
     }
 }

@@ -17,10 +17,10 @@
                     @foreach ($types as $type)
                         <th>{{ $type->name }}</th>
                     @endforeach
-                    @if ($menus->count() == 0)
+                    @if ($colectionsMenus->count() == 0)
                         Nenhum menu cadastrado
                     @else
-                        @foreach ($menus as $menu)
+                        @foreach ($colectionsMenus as $menu)
                             <tr>
                                 <td> <i class="{{ $menu->icon }}"></i> </td>
                                 <td>{{ $menu->name }}

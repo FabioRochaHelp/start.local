@@ -15,7 +15,12 @@ class MenuUsersTypeSeeder extends Seeder
         //
         $menuUsersTypes = [
             ['menu_id' => 1, 'user_type_id' => 1],
-            ['menu_id' => 2, 'user_type_id' => 1],
         ];
+
+        foreach ($menuUsersTypes as $menuUserType) {
+            \App\Models\MenuUsersType::create($menuUserType);
+        }
+
+        
     }
 }

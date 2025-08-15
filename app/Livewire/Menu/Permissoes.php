@@ -10,8 +10,8 @@ use App\Models\MenuUsersType;
 class Permissoes extends Component
 {
     public $menuId = null;
-    public $menus;
     public $menu;
+    public $colectionsMenus;
     public $types;
     public $type;
     public $name;
@@ -28,7 +28,7 @@ class Permissoes extends Component
 
     public function mount()
     {
-        $this->menus = $this->getMenus();
+        $this->colectionsMenus = Menu::all();
         $this->types = UserType::all();
     }
 
@@ -80,7 +80,8 @@ class Permissoes extends Component
     public function getMenus()
     {
        
-        $this->menus = Menu::all();
+      $this->colectionsMenus = Menu::all();
+
     }
 
     public function addPermissoes($menu, $type)

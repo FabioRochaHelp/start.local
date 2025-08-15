@@ -2,21 +2,32 @@
 
 namespace Database\Seeders;
 
-use App\Models\Doctor;
-use App\Models\Surgery;
-use App\Models\Unity;
 use Illuminate\Database\Seeder;
+
+use App\Models\User;
+use App\Models\UserType;
+use App\Models\Menu;
+use App\Models\SubMenu;
+use App\Models\MenuUsersType;
+use App\Models\SubMenuUsersType;
+
 
 class DatabaseSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
     public function run(): void
     {
         $this->call([
-           
             UserTypeSeeder::class,
-            InstitutionSeeder::class,
             UserSeeder::class,
+            MenuSeeder::class,
+            SubMenuSeeder::class,
+            MenuUsersTypeSeeder::class,
+            SubMenuUsersTypeSeeder::class
         ]);
-      
     }
 }
