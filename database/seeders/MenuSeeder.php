@@ -14,7 +14,7 @@ class MenuSeeder extends Seeder
     {
         //
         $menus = [
-            ['name' => 'Configurações', 'url' => 'settings', 'icon' => 'settings'],
+            ['name' => 'Configurações', 'url' => 'settings', 'icon' => 'fa fa-cog'],
         ];
 
         foreach ($menus as $menu) {
