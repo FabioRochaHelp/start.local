@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\SubMenu;
 
 class SubMenuSeeder extends Seeder
 {
@@ -18,7 +19,7 @@ class SubMenuSeeder extends Seeder
         ];
 
         foreach ($subMenus as $subMenu) {
-            \App\Models\SubMenu::create($subMenu);
+            SubMenu::create($subMenu);
         }
 
     }
