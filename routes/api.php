@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HealthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,9 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+// Health Check - Verificar Conexão com Banco através do microserviço
+Route::get('/health', [HealthController::class, 'check'])->name('api.health');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

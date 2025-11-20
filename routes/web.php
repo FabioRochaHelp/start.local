@@ -7,10 +7,9 @@ use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\SubMenuController;
+use App\Http\Controllers\HealthController;
 
-Route::get('/health', function () {
-    return response()->json(['status' => 'ok']);
-})->name('health');
+Route::get('/health', [HealthController::class, 'index'])->name('health.view');
 
 Route::fallback(function () {
     return view('error-404');
