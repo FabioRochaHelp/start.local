@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HealthController;
+use App\Http\Controllers\MessageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +18,12 @@ use App\Http\Controllers\HealthController;
 
 // Health Check - Verificar Conexão com Banco através do microserviço
 Route::get('/health', [HealthController::class, 'check'])->name('api.health');
+
+// Message Service - Envio de mensagens
+Route::post('/message/send', [MessageController::class, 'send'])->name('api.message.send');
+
+// Message Service - Verificar status da sessão
+Route::get('/message/status', [MessageController::class, 'status'])->name('api.message.status');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

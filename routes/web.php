@@ -8,8 +8,10 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\SubMenuController;
 use App\Http\Controllers\HealthController;
+use App\Http\Controllers\MessageController;
 
 Route::get('/health', [HealthController::class, 'index'])->name('health.view');
+Route::get('/message', [MessageController::class, 'index'])->name('message.view');
 
 Route::fallback(function () {
     return view('error-404');
