@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\View;
 use App\Models\Menu;
 use App\Models\MenuUsersType;
 use App\Models\SubMenuUsersType;
+use Schema;
 
 class ViewServiceProvider extends ServiceProvider
 {
@@ -16,24 +17,27 @@ class ViewServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        $menuUsersTypes = MenuUsersType::all();
-        $subMenuUsersTypes = SubMenuUsersType::all();
+        if (Schema::hasTable('menu_users_types') && Schema::hasTable('sub_menu_users_types') && Schema::hasTable('menus')) {
+            $menuUsersTypes = MenuUsersType::all();
+            $subMenuUsersTypes = SubMenuUsersType::all();
 
-        View::share('menuUsersTypes', $menuUsersTypes);
-        View::share('subMenuUsersTypes', $subMenuUsersTypes);
-        View::composer('*', function ($view) {
-            $view->with(
-                'menus',
-                Menu::with([
-                    'subMenus' => function ($query) {
-                        $query->where('direct', 1);
-                    },
-                ])
-                    ->whereHas('subMenus', function ($query) {
-                        $query->where('direct', 1);
-                    })
-                    ->get(),
-            );
-        });
+            View::share('menuUsersTypes', $menuUsersTypes);
+            View::share('subMenuUsersTypes', $subMenuUsersTypes);
+
+            View::composer('*', function ($view) {
+                $view->with(
+                    'menus',
+                    Menu::with([
+                        'subMenus' => function ($query) {
+                            $query->where('direct', 1);
+                        },
+                    ])
+                        ->whereHas('subMenus', function ($query) {
+                            $query->where('direct', 1);
+                        })
+                        ->get(),
+                );
+            });
+        }
     }
 }
