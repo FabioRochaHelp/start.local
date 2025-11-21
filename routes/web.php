@@ -9,9 +9,11 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\SubMenuController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\AteatendController;
 
 Route::get('/health', [HealthController::class, 'index'])->name('health.view');
 Route::get('/message', [MessageController::class, 'index'])->name('message.view');
+Route::get('/ateatend', [AteatendController::class, 'index'])->name('ateatend.index');
 
 Route::fallback(function () {
     return view('error-404');
@@ -65,6 +67,16 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/submenu/edit/{id}', 'edit')->name('submenu.edit.view');
         Route::post('/submenu/edit/{id}', 'update')->name('submenu.edit.form');
         Route::get('/submenu/delete/{id}', 'destroy')->name('submenu.delete');
+    });
+
+    Route::controller(AteatendController::class)->group(function () {
+        Route::get('/ateatend/list', 'list')->name('ateatend.list');
+        Route::get('/ateatend/search/nome/{nome}', 'searchByNome')->name('ateatend.search.nome.param');
+        Route::get('/ateatend/search/nome', 'searchByNome')->name('ateatend.search.nome');
+        Route::get('/ateatend/search/id/{id}', 'searchById')->name('ateatend.search.id.param');
+        Route::get('/ateatend/search/id', 'searchById')->name('ateatend.search.id');
+        Route::get('/ateatend/search/documento/{documento}', 'searchByDocumento')->name('ateatend.search.documento.param');
+        Route::get('/ateatend/search/documento', 'searchByDocumento')->name('ateatend.search.documento');
     });
     
 });
