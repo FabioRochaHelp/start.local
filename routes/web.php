@@ -10,10 +10,14 @@ use App\Http\Controllers\SubMenuController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\AteatendController;
+use App\Http\Controllers\AtepacieController;
+use App\Http\Controllers\AteconsuController;
 
 Route::get('/health', [HealthController::class, 'index'])->name('health.view');
 Route::get('/message', [MessageController::class, 'index'])->name('message.view');
 Route::get('/ateatend', [AteatendController::class, 'index'])->name('ateatend.index');
+Route::get('/atepacie', [AtepacieController::class, 'index'])->name('atepacie.index');
+Route::get('/ateconsu', [AteconsuController::class, 'index'])->name('ateconsu.index');
 
 Route::fallback(function () {
     return view('error-404');
@@ -77,6 +81,48 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/ateatend/search/id', 'searchById')->name('ateatend.search.id');
         Route::get('/ateatend/search/documento/{documento}', 'searchByDocumento')->name('ateatend.search.documento.param');
         Route::get('/ateatend/search/documento', 'searchByDocumento')->name('ateatend.search.documento');
+    });
+
+    Route::controller(AtepacieController::class)->group(function () {
+        Route::get('/atepacie/list', 'list')->name('atepacie.list');
+        Route::get('/atepacie/create', 'create')->name('atepacie.create');
+        Route::post('/atepacie/store', 'store')->name('atepacie.store');
+        Route::get('/atepacie/show/{numero}', 'show')->name('atepacie.show');
+        Route::get('/atepacie/edit/{numero}', 'edit')->name('atepacie.edit');
+        Route::put('/atepacie/update/{numero}', 'update')->name('atepacie.update');
+        Route::get('/atepacie/delete/{numero}', 'destroy')->name('atepacie.delete');
+        Route::get('/atepacie/search/numero/{numero}', 'searchByNumero')->name('atepacie.search.numero.param');
+        Route::get('/atepacie/search/numero', 'searchByNumero')->name('atepacie.search.numero');
+        Route::get('/atepacie/search/cpf/{cpf}', 'searchByCpf')->name('atepacie.search.cpf.param');
+        Route::get('/atepacie/search/cpf', 'searchByCpf')->name('atepacie.search.cpf');
+        Route::get('/atepacie/search/documento/{documento}', 'searchByDocumento')->name('atepacie.search.documento.param');
+        Route::get('/atepacie/search/documento', 'searchByDocumento')->name('atepacie.search.documento');
+        Route::get('/atepacie/search/nome/{nome}', 'searchByNome')->name('atepacie.search.nome.param');
+        Route::get('/atepacie/search/nome', 'searchByNome')->name('atepacie.search.nome');
+    });
+
+    Route::controller(AteconsuController::class)->group(function () {
+        Route::get('/ateconsu/list', 'list')->name('ateconsu.list');
+        Route::get('/ateconsu/create', 'create')->name('ateconsu.create');
+        Route::post('/ateconsu/store', 'store')->name('ateconsu.store');
+        Route::get('/ateconsu/show/{numero}', 'show')->name('ateconsu.show');
+        Route::get('/ateconsu/edit/{numero}', 'edit')->name('ateconsu.edit');
+        Route::put('/ateconsu/update/{numero}', 'update')->name('ateconsu.update');
+        Route::get('/ateconsu/delete/{numero}', 'destroy')->name('ateconsu.delete');
+        Route::get('/ateconsu/search/numero/{numero}', 'searchByNumero')->name('ateconsu.search.numero.param');
+        Route::get('/ateconsu/search/numero', 'searchByNumero')->name('ateconsu.search.numero');
+        Route::get('/ateconsu/search/nome/{nome}', 'searchByNome')->name('ateconsu.search.nome.param');
+        Route::get('/ateconsu/search/nome', 'searchByNome')->name('ateconsu.search.nome');
+        Route::get('/ateconsu/search/tipo/{tipo}', 'searchByTipo')->name('ateconsu.search.tipo.param');
+        Route::get('/ateconsu/search/tipo', 'searchByTipo')->name('ateconsu.search.tipo');
+        Route::get('/ateconsu/search/situacao/{situacao}', 'searchBySituacao')->name('ateconsu.search.situacao.param');
+        Route::get('/ateconsu/search/situacao', 'searchBySituacao')->name('ateconsu.search.situacao');
+        Route::get('/ateconsu/search/especialidade/{especialidade}', 'searchByEspecialidade')->name('ateconsu.search.especialidade.param');
+        Route::get('/ateconsu/search/especialidade', 'searchByEspecialidade')->name('ateconsu.search.especialidade');
+        Route::get('/ateconsu/search/medico/{medico}', 'searchByMedico')->name('ateconsu.search.medico.param');
+        Route::get('/ateconsu/search/medico', 'searchByMedico')->name('ateconsu.search.medico');
+        Route::get('/ateconsu/search/setor/{setor}', 'searchBySetor')->name('ateconsu.search.setor.param');
+        Route::get('/ateconsu/search/setor', 'searchBySetor')->name('ateconsu.search.setor');
     });
     
 });

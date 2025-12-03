@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\AteatendController;
+use App\Http\Controllers\AtepacieController;
+use App\Http\Controllers\AteconsuController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +34,33 @@ Route::get('/ateatend/count', [AteatendController::class, 'count'])->name('api.a
 Route::get('/ateatend/nome/{nome}', [AteatendController::class, 'searchByNome'])->name('api.ateatend.search.nome');
 Route::get('/ateatend/id/{id}', [AteatendController::class, 'searchById'])->name('api.ateatend.search.id');
 Route::get('/ateatend/documento/{documento}', [AteatendController::class, 'searchByDocumento'])->name('api.ateatend.search.documento');
+
+// Atepacie Service - Pacientes CRUD
+Route::get('/atepacie/list', [AtepacieController::class, 'list'])->name('api.atepacie.list');
+Route::get('/atepacie/count', [AtepacieController::class, 'count'])->name('api.atepacie.count');
+Route::get('/atepacie/numero/{numero}', [AtepacieController::class, 'searchByNumero'])->name('api.atepacie.search.numero');
+Route::get('/atepacie/cpf/{cpf}', [AtepacieController::class, 'searchByCpf'])->name('api.atepacie.search.cpf');
+Route::get('/atepacie/documento/{documento}', [AtepacieController::class, 'searchByDocumento'])->name('api.atepacie.search.documento');
+Route::get('/atepacie/nome/{nome}', [AtepacieController::class, 'searchByNome'])->name('api.atepacie.search.nome');
+Route::post('/atepacie', [AtepacieController::class, 'store'])->name('api.atepacie.store');
+Route::get('/atepacie/{numero}', [AtepacieController::class, 'show'])->name('api.atepacie.show');
+Route::put('/atepacie/{numero}', [AtepacieController::class, 'update'])->name('api.atepacie.update');
+Route::delete('/atepacie/{numero}', [AtepacieController::class, 'destroy'])->name('api.atepacie.delete');
+
+// Ateconsu Service - Consultas CRUD
+Route::get('/ateconsu/list', [AteconsuController::class, 'list'])->name('api.ateconsu.list');
+Route::get('/ateconsu/count', [AteconsuController::class, 'count'])->name('api.ateconsu.count');
+Route::get('/ateconsu/numero/{numero}', [AteconsuController::class, 'searchByNumero'])->name('api.ateconsu.search.numero');
+Route::get('/ateconsu/nome/{nome}', [AteconsuController::class, 'searchByNome'])->name('api.ateconsu.search.nome');
+Route::get('/ateconsu/tipo/{tipo}', [AteconsuController::class, 'searchByTipo'])->name('api.ateconsu.search.tipo');
+Route::get('/ateconsu/situacao/{situacao}', [AteconsuController::class, 'searchBySituacao'])->name('api.ateconsu.search.situacao');
+Route::get('/ateconsu/especialidade/{especialidade}', [AteconsuController::class, 'searchByEspecialidade'])->name('api.ateconsu.search.especialidade');
+Route::get('/ateconsu/medico/{medico}', [AteconsuController::class, 'searchByMedico'])->name('api.ateconsu.search.medico');
+Route::get('/ateconsu/setor/{setor}', [AteconsuController::class, 'searchBySetor'])->name('api.ateconsu.search.setor');
+Route::post('/ateconsu', [AteconsuController::class, 'store'])->name('api.ateconsu.store');
+Route::get('/ateconsu/{numero}', [AteconsuController::class, 'show'])->name('api.ateconsu.show');
+Route::put('/ateconsu/{numero}', [AteconsuController::class, 'update'])->name('api.ateconsu.update');
+Route::delete('/ateconsu/{numero}', [AteconsuController::class, 'destroy'])->name('api.ateconsu.delete');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
