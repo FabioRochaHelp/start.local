@@ -12,12 +12,14 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\AteatendController;
 use App\Http\Controllers\AtepacieController;
 use App\Http\Controllers\AteconsuController;
+use App\Http\Controllers\AtegencController;
 
 Route::get('/health', [HealthController::class, 'index'])->name('health.view');
 Route::get('/message', [MessageController::class, 'index'])->name('message.view');
 Route::get('/ateatend', [AteatendController::class, 'index'])->name('ateatend.index');
 Route::get('/atepacie', [AtepacieController::class, 'index'])->name('atepacie.index');
 Route::get('/ateconsu', [AteconsuController::class, 'index'])->name('ateconsu.index');
+Route::get('/ateagenc', [AtegencController::class, 'index'])->name('ateagencindex');
 
 Route::fallback(function () {
     return view('error-404');
@@ -123,6 +125,20 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/ateconsu/search/medico', 'searchByMedico')->name('ateconsu.search.medico');
         Route::get('/ateconsu/search/setor/{setor}', 'searchBySetor')->name('ateconsu.search.setor.param');
         Route::get('/ateconsu/search/setor', 'searchBySetor')->name('ateconsu.search.setor');
+    });
+
+    Route::controller(AtegencController::class)->group(function () {
+        Route::get('/ateagenc/list', 'list')->name('ateagenc.list');
+        Route::get('/ateagenc/create', 'create')->name('ateagenc.create');
+        Route::post('/ateagenc/store', 'store')->name('ateagenc.store');
+        Route::get('/ateagenc/show/{id}', 'show')->name('ateagenc.show');
+        Route::get('/ateagenc/edit/{id}', 'edit')->name('ateagenc.edit');
+        Route::put('/ateagenc/update/{id}', 'update')->name('ateagenc.update');
+        Route::get('/ateagenc/delete/{id}', 'destroy')->name('ateagenc.delete');
+        Route::get('/ateagenc/search/id/{id}', 'searchById')->name('ateagenc.search.id.param');
+        Route::get('/ateagenc/search/id', 'searchById')->name('ateagenc.search.id');
+        Route::get('/ateagenc/search/nome-consulta/{nome}', 'searchByNomeConsulta')->name('ateagenc.search.nome.consulta.param');
+        Route::get('/ateagenc/search/nome-consulta', 'searchByNomeConsulta')->name('ateagenc.search.nome.consulta');
     });
     
 });

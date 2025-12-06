@@ -7,6 +7,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\AteatendController;
 use App\Http\Controllers\AtepacieController;
 use App\Http\Controllers\AteconsuController;
+use App\Http\Controllers\AtegencController;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,6 +62,16 @@ Route::post('/ateconsu', [AteconsuController::class, 'store'])->name('api.atecon
 Route::get('/ateconsu/{numero}', [AteconsuController::class, 'show'])->name('api.ateconsu.show');
 Route::put('/ateconsu/{numero}', [AteconsuController::class, 'update'])->name('api.ateconsu.update');
 Route::delete('/ateconsu/{numero}', [AteconsuController::class, 'destroy'])->name('api.ateconsu.delete');
+
+// Ategenc Service - Agendamentos CRUD
+Route::get('/ateagenc/list', [AtegencController::class, 'list'])->name('api.ateagenclist');
+Route::get('/ateagenc/detalhes', [AtegencController::class, 'list'])->name('api.ateagenclist.detalhes');
+Route::get('/ateagenc/count', [AtegencController::class, 'count'])->name('api.ateagenccount');
+Route::get('/ateagenc/detalhes/{id}', [AtegencController::class, 'searchById'])->name('api.ateagencsearch.detalhes');
+Route::get('/ateagenc/nome-consulta/{nome}', [AtegencController::class, 'searchByNomeConsulta'])->name('api.ateagencsearch.nome.consulta');
+Route::post('/ateagenc', [AtegencController::class, 'store'])->name('api.ateagencstore');
+Route::put('/ateagenc/{id}', [AtegencController::class, 'update'])->name('api.ateagencupdate');
+Route::delete('/ateagenc/{id}', [AtegencController::class, 'destroy'])->name('api.ateagencdelete');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
