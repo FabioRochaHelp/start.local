@@ -6,7 +6,7 @@
                     <ol class="breadcrumb ps-0">
                         <li class="breadcrumb-item"><i class="material-icons">home</i> <a
                                 href="{{ route('home.view') }}">Home</a> </li>
-                        <li class="breadcrumb-item"><a href="{{ route('ateagencindex') }}">Agendamentos</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('ateagenc.list') }}">Agendamentos</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Detalhes</li>
                     </ol>
                 </nav>
@@ -14,7 +14,7 @@
                     <div class="ms-panel-header ms-panel-custome">
                         <h6>Detalhes do Agendamento</h6>
                         <div>
-                            <a href="{{ route('ateagencindex') }}" class="ms-text-primary">Voltar</a>
+                            <a href="{{ route('ateagenc.list') }}" class="ms-text-primary">Voltar</a>
                             @if(isset($agendamento))
                                 @php
                                     $isStructured = isset($agendamento['agendamento']);
@@ -22,7 +22,7 @@
                                     $id = $agendamentoData['NNUMEGENC'] ?? $agendamentoData['NNUMEAGENC'] ?? null;
                                 @endphp
                                 @if($id)
-                                    <a href="{{ route('ateagencedit', ['id' => $id]) }}" class="ms-text-primary ms-3">Editar</a>
+                                    <a href="{{ route('ateagenc.edit', ['id' => $id]) }}" class="ms-text-primary ms-3">Editar</a>
                                 @endif
                             @endif
                         </div>

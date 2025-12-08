@@ -432,6 +432,6 @@ class AtegencController extends Controller
             $error = $result['error'] ?? 'Agendamento não encontrado';
         }
 
-        return view('ateagencdetail', compact('agendamento', 'error'));
+        return view('ateagenc.detail', compact('agendamento', 'error'));
     }
 }

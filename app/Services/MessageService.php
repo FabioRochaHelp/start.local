@@ -231,5 +231,77 @@ class MessageService
             throw new Exception('Erro ao verificar status da sessão: ' . $e->getMessage(), 0, $e);
         }
     }
+
+    /**
+     * Envia um link com preview
+     *
+     * @param string $sessionName Nome da sessão
+     * @param string $number Número do destinatário (com código do país)
+     * @param string $url URL do link
+     * @param string $caption Legenda/descrição do link
+     * @return array
+     * @throws Exception
+     */
+    public function sendLink(string $sessionName, string $number, string $caption, string $url): array
+    {
+        try {
+            $urlEndpoint = rtrim($this->baseUrl, '/') . '/sendLink';
+
+            $payload = [
+                'sessionName' => $sessionName,
+                'number' => $number,
+                'caption' => $caption,
+                'url' => $url
+            ];
+
+            Log::info('Enviando link com preview', [
+                'url' => $urlEndpoint,
+                'payload' => $payload
+            ]);
+
+            $response = Http::timeout($this->timeout)
+                ->withHeaders([
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/json'
+                ])
+                ->post($urlEndpoint, $payload);
+
+            if ($response->successful()) {
+                $data = $response->json();
+                
+                Log::info('Link enviado com sucesso', [
+                    'response' => $data
+                ]);
+
+                return [
+                    'success' => true,
+                    'data' => $data,
+                    'message' => 'Link enviado com sucesso'
+                ];
+            } else {
+                $errorMessage = 'Erro ao enviar link. Status: ' . $response->status();
+                
+                Log::error('Erro ao enviar link', [
+                    'status' => $response->status(),
+                    'body' => $response->body()
+                ]);
+
+                return [
+                    'success' => false,
+                    'error' => $errorMessage,
+                    'status' => $response->status(),
+                    'data' => $response->json()
+                ];
+            }
+
+        } catch (Exception $e) {
+            Log::error('Exceção ao enviar link', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            throw new Exception('Erro ao enviar link: ' . $e->getMessage(), 0, $e);
+        }
+    }
 }
 
