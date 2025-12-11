@@ -19,7 +19,11 @@ Route::get('/message', [MessageController::class, 'index'])->name('message.view'
 Route::get('/ateatend', [AteatendController::class, 'index'])->name('ateatend.index');
 Route::get('/atepacie', [AtepacieController::class, 'index'])->name('atepacie.index');
 Route::get('/ateconsu', [AteconsuController::class, 'index'])->name('ateconsu.index');
-Route::get('/ateagenc', [AtegencController::class, 'index'])->name('ateagencindex');
+Route::get('/ateagenc', [AtegencController::class, 'index'])->name('ateagenc.index');
+
+// Rotas públicas para confirmação de agendamento (acessível via link do WhatsApp, funciona com ou sem autenticação)
+Route::get('/agendamentos/confirmar/{id}', [AtegencController::class, 'confirmar'])->name('ateagenc.confirmar');
+Route::post('/agendamentos/confirmar/{id}', [AtegencController::class, 'processarConfirmacao'])->name('ateagenc.processar.confirmacao');
 
 Route::fallback(function () {
     return view('error-404');

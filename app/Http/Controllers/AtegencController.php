@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 use Exception;
 
 class AtegencController extends Controller
@@ -433,5 +434,155 @@ class AtegencController extends Controller
         }
 
         return view('ateagenc.detail', compact('agendamento', 'error'));
+    }
+
+    /**
+     * Exibe a página de confirmação do agendamento
+     *
+     * @param int $id
+     * @return View|RedirectResponse
+     */
+    public function confirmar(int $id)
+    {
+        try {
+            $result = $this->ategencService->getDetalhesById($id);
+
+            if (!$result['success'] || empty($result['data'])) {
+                return redirect()->route('ateagenc.index')
+                    ->with('toast_message', 'Agendamento não encontrado')
+                    ->with('toast_type', 'error');
+            }
+
+            $agendamento = $result['data'];
+
+            return view('ateagenc.confirmar', compact('agendamento', 'id'));
+
+        } catch (Exception $e) {
+            Log::error('Erro ao exibir página de confirmação', [
+                'id' => $id,
+                'error' => $e->getMessage()
+            ]);
+
+            return redirect()->route('ateagenc.index')
+                ->with('toast_message', 'Erro ao carregar agendamento: ' . $e->getMessage())
+                ->with('toast_type', 'error');
+        }
+    }
+
+    /**
+     * Processa a confirmação do agendamento
+     *
+     * @param Request $request
+     * @param int $id
+     * @return RedirectResponse|JsonResponse
+     */
+    public function processarConfirmacao(Request $request, int $id)
+    {
+        try {
+            $acao = $request->input('acao'); // 'confirmar' ou 'cancelar'
+
+            if (!in_array($acao, ['confirmar', 'cancelar'])) {
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'success' => false,
+                        'error' => 'Ação inválida. Use "confirmar" ou "cancelar".'
+                    ], 400);
+                }
+
+                return back()
+                    ->with('toast_message', 'Ação inválida')
+                    ->with('toast_type', 'error');
+            }
+
+            // Busca os dados do agendamento
+            $result = $this->ategencService->getDetalhesById($id);
+
+            if (!$result['success'] || empty($result['data'])) {
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'success' => false,
+                        'error' => 'Agendamento não encontrado'
+                    ], 404);
+                }
+
+                return back()
+                    ->with('toast_message', 'Agendamento não encontrado')
+                    ->with('toast_type', 'error');
+            }
+
+            $agendamentoData = $result['data'];
+            $agendamento = $agendamentoData['agendamento'] ?? $agendamentoData;
+
+            // Prepara os dados para envio via API
+            $observacao = $acao === 'confirmar' 
+                ? 'Agendamento confirmado pelo paciente' 
+                : 'Agendamento cancelado pelo paciente';
+
+            $numeAgenc = $agendamento['NNUMAGENC'] ?? $agendamento['NNUMEGENC'] ?? $id;
+
+            $flateData = [
+                'NNUMEFLATE' => 999,
+                'NNUMEAGENC' => $numeAgenc,
+                'NNUMEAGEND' => $numeAgenc,
+                'DDATAFLATE' => now()->toDateTimeString(),
+                'COBSEFLATE' => $observacao,
+                'NNUMEUSUA' => 888,
+                'NNUMEATEND' => $agendamento['NNUMEATEND'] ?? null,
+                'NNUMECAGEN' => $agendamento['NNUMECAGEN'] ?? null,
+                'NNUMEGUIA' => $agendamento['NNUMEGUIA'] ?? null,
+                'NNUMEMENSA' => $agendamento['NNUMEMENSA'] ?? null,
+            ];
+
+            // Envia para a API
+            $createResult = $this->ategencService->createFlate($flateData);
+
+            if (!$createResult['success']) {
+                throw new Exception($createResult['error'] ?? 'Erro ao processar confirmação');
+            }
+
+            $ateflate = $createResult['data'];
+
+            Log::info('Agendamento processado', [
+                'id' => $id,
+                'acao' => $acao,
+                'flate_data' => $ateflate
+            ]);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => $acao === 'confirmar' ? 'Agendamento confirmado com sucesso!' : 'Agendamento cancelado com sucesso!',
+                    'data' => $ateflate
+                ], 200);
+            }
+
+            $mensagem = $acao === 'confirmar' 
+                ? 'Agendamento confirmado com sucesso!' 
+                : 'Agendamento cancelado com sucesso!';
+
+            return redirect()->route('ateagenc.confirmar', ['id' => $id])
+                ->with('toast_message', $mensagem)
+                ->with('toast_type', 'success')
+                ->with('processado', true);
+
+        } catch (Exception $e) {
+            Log::error('Erro ao processar confirmação', [
+                'id' => $id,
+                'acao' => $request->input('acao'),
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Erro ao processar: ' . $e->getMessage()
+                ], 500);
+            }
+
+            return back()
+                ->with('toast_message', 'Erro ao processar: ' . $e->getMessage())
+                ->with('toast_type', 'error');
+        }
     }
 }

@@ -257,7 +257,7 @@ class NotificarAgendamentosJob implements ShouldQueue
         $horario = $agendamento['CHORAAGENC'] ?? 'Agendamento a confirmar';
 
         // Obtém ID do agendamento para o link
-        $idAgendamento = $agendamento['NAGENAGENC'] ?? $agendamento['NNUMEGENC'] ?? null;
+        $idAgendamento = $agendamento['NNUMAGENC'] ?? 1;
 
         // Formata o número do telefone (remove caracteres não numéricos)
         $numeroLimpo = preg_replace('/[^0-9]/', '', $telefone);
@@ -283,7 +283,7 @@ class NotificarAgendamentosJob implements ShouldQueue
         // Se houver ID do agendamento, envia o link com preview
         if ($idAgendamento) {
             // $urlConfirmacao = url("/agendamentos/confirmar/{$idAgendamento}");
-            $urlConfirmacao = "https://bioshild.com.br";
+            $urlConfirmacao = "http://localhost:8000/agendamentos/confirmar/{$idAgendamento}";
             
             // Envia o link com preview usando a mensagem como caption
             $result = $this->messageService->sendLink(

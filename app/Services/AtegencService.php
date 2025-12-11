@@ -581,4 +581,175 @@ class AtegencService
             throw new Exception('Erro ao remover agendamento: ' . $e->getMessage(), 0, $e);
         }
     }
+
+    /**
+     * Busca o status de confirmação/cancelamento de um agendamento
+     *
+     * @param int $id
+     * @return array
+     * @throws Exception
+     */
+    public function getStatusFlate(int $id): array
+    {
+        try {
+            if (empty($id)) {
+                return [
+                    'success' => false,
+                    'error' => 'ID do agendamento é obrigatório'
+                ];
+            }
+
+            $url = rtrim($this->baseUrl, '/') . '/ateflate/agendamento/' . $id;
+
+            Log::info('Buscando status do fluxo de atendimento', [
+                'url' => $url,
+                'id' => $id
+            ]);
+
+            $response = Http::timeout($this->timeout)
+                ->withHeaders([
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/json'
+                ])
+                ->get($url);
+
+            if ($response->successful()) {
+                $data = $response->json();
+                
+                Log::info('Status do fluxo obtido com sucesso', [
+                    'id' => $id,
+                    'response' => $data
+                ]);
+
+                return [
+                    'success' => true,
+                    'data' => $data['data'] ?? $data,
+                    'status' => $this->extrairStatus($data['data'] ?? $data)
+                ];
+            } else {
+                // Se não encontrar, retorna sucesso mas sem status (não foi processado ainda)
+                if ($response->status() === 404) {
+                    return [
+                        'success' => true,
+                        'data' => null,
+                        'status' => null
+                    ];
+                }
+
+                $errorMessage = 'Erro ao buscar status. Status: ' . $response->status();
+                
+                Log::error('Erro ao buscar status do fluxo', [
+                    'id' => $id,
+                    'status' => $response->status(),
+                    'body' => $response->body()
+                ]);
+
+                return [
+                    'success' => false,
+                    'error' => $errorMessage,
+                    'status' => $response->status(),
+                    'data' => $response->json()
+                ];
+            }
+
+        } catch (Exception $e) {
+            Log::error('Exceção ao buscar status do fluxo', [
+                'id' => $id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            throw new Exception('Erro ao buscar status: ' . $e->getMessage(), 0, $e);
+        }
+    }
+
+    /**
+     * Cria um registro de confirmação ou cancelamento
+     *
+     * @param array $flateData
+     * @return array
+     * @throws Exception
+     */
+    public function createFlate(array $flateData): array
+    {
+        try {
+            $url = rtrim($this->baseUrl, '/') . '/ateflate';
+
+            Log::info('Criando registro de fluxo de atendimento', [
+                'url' => $url,
+                'data' => $flateData
+            ]);
+
+            $response = Http::timeout($this->timeout)
+                ->withHeaders([
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/json'
+                ])
+                ->post($url, $flateData);
+
+            if ($response->successful()) {
+                $data = $response->json();
+                
+                Log::info('Registro de fluxo criado com sucesso', [
+                    'response' => $data
+                ]);
+
+                return [
+                    'success' => true,
+                    'data' => $data['data'] ?? $data,
+                    'message' => $data['message'] ?? 'Registro criado com sucesso'
+                ];
+            } else {
+                $errorMessage = 'Erro ao criar registro. Status: ' . $response->status();
+                
+                Log::error('Erro ao criar registro de fluxo', [
+                    'status' => $response->status(),
+                    'body' => $response->body()
+                ]);
+
+                return [
+                    'success' => false,
+                    'error' => $errorMessage,
+                    'status' => $response->status(),
+                    'data' => $response->json()
+                ];
+            }
+
+        } catch (Exception $e) {
+            Log::error('Exceção ao criar registro de fluxo', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            throw new Exception('Erro ao criar registro: ' . $e->getMessage(), 0, $e);
+        }
+    }
+
+    /**
+     * Extrai o status (confirmado/cancelado) dos dados do fluxo
+     *
+     * @param array|null $data
+     * @return string|null
+     */
+    private function extrairStatus(?array $data): ?string
+    {
+        if (empty($data)) {
+            return null;
+        }
+
+        // Se for um array de registros, pega o mais recente
+        if (isset($data[0])) {
+            $data = $data[0];
+        }
+
+        $observacao = $data['COBSEFLATE'] ?? $data['cobseflate'] ?? '';
+        
+        if (stripos($observacao, 'confirmado') !== false || stripos($observacao, 'confirmada') !== false) {
+            return 'confirmado';
+        } elseif (stripos($observacao, 'cancelado') !== false || stripos($observacao, 'cancelada') !== false) {
+            return 'cancelado';
+        }
+
+        return null;
+    }
 }
