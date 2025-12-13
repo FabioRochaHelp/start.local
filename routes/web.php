@@ -7,7 +7,7 @@ use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\SubMenuController;
-use App\Livewire\Pessoa\TableController;
+use App\Http\Controllers\AlunoController;
 
 Route::get('/health', function () {
     return response()->json(['status' => 'ok']);
@@ -79,6 +79,14 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/pessoas/{pessoa}/toggle-status', 'toggleStatus')->name('pessoas.toggle-status');
         Route::patch('/pessoas/{id}/restore', 'restore')->name('pessoas.restore');
         Route::post('/pessoas/{pessoa}/photo', 'photo')->name('pessoas.photo');
+    });
+
+    // Rotas para CRUD de Alunos
+    Route::controller(AlunoController::class)->group(function () {
+        Route::get('/alunos', 'index')->name('alunos.index');
+        Route::get('/alunos/create', 'create')->name('alunos.create');
+        Route::get('/alunos/{aluno}', 'show')->name('alunos.show');
+        Route::get('/alunos/{aluno}/edit', 'edit')->name('alunos.edit');
     });
     
 });
