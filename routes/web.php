@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\SubMenuController;
 use App\Http\Controllers\AlunoController;
+use App\Http\Controllers\TurmaController;
 
 Route::get('/health', function () {
     return response()->json(['status' => 'ok']);
@@ -87,6 +88,15 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/alunos/create', 'create')->name('alunos.create');
         Route::get('/alunos/{aluno}', 'show')->name('alunos.show');
         Route::get('/alunos/{aluno}/edit', 'edit')->name('alunos.edit');
+    });
+
+    // Rotas para CRUD de Turmas
+    Route::controller(TurmaController::class)->group(function () {
+        Route::get('/turmas', 'index')->name('turmas.index');
+        Route::get('/turmas/create', 'create')->name('turmas.create');
+        Route::get('/turmas/{turma}', 'show')->name('turmas.show');
+        Route::get('/turmas/{turma}/edit', 'edit')->name('turmas.edit');
+        Route::delete('/turmas/{turma}', 'destroy')->name('turmas.destroy');
     });
     
 });
