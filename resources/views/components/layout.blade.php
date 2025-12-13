@@ -35,6 +35,7 @@
     <!-- Select2 CSS -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
     @livewireStyles
+    @stack('styles')
 </head>
 
 <body class="ms-body ms-aside-left-open ms-primary-theme ms-has-quickbar">
@@ -79,6 +80,7 @@
     <!-- Settings -->
     <script src="{{ asset('/assets/js/settings.js') }}"></script>
     @livewireScripts
+    @stack('scripts')
 
     <script src="{{ asset('/assets/js/toastr.min.js') }}"></script>
     <script src="{{ asset('/assets/js/toast.js') }}"></script>

@@ -1,0 +1,10 @@
+/* Custom palette: Instituto Regina Mater */
+:root{
+ --irm-primary:#0d2f75;
+ --irm-light-blue:#4f7ccf;
+ --irm-gold:#ffcc33;
+}
+.bg-irm-primary{background-color:var(--irm-primary)!important;}
+.text-irm-gold{color:var(--irm-gold)!important;}
+.bg-primary{background-color:var(--irm-primary)!important;}
+.btn-primary{background-color:var(--irm-primary)!important;border-color:var(--irm-primary)!important;}

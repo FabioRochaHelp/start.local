@@ -7,6 +7,7 @@ use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\SubMenuController;
+use App\Livewire\Pessoa\TableController;
 
 Route::get('/health', function () {
     return response()->json(['status' => 'ok']);
@@ -64,6 +65,20 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/submenu/edit/{id}', 'edit')->name('submenu.edit.view');
         Route::post('/submenu/edit/{id}', 'update')->name('submenu.edit.form');
         Route::get('/submenu/delete/{id}', 'destroy')->name('submenu.delete');
+    });
+
+    // Rotas para CRUD de Pessoas
+    Route::controller(\App\Http\Controllers\PessoaController::class)->group(function () {
+        Route::get('/pessoas', 'index')->name('pessoas.index');
+        Route::get('/pessoas/create', 'create')->name('pessoas.create');
+        Route::post('/pessoas', 'store')->name('pessoas.store');
+        Route::get('/pessoas/{pessoa}', 'show')->name('pessoas.show');
+        Route::get('/pessoas/{pessoa}/edit', 'edit')->name('pessoas.edit');
+        Route::put('/pessoas/{pessoa}', 'update')->name('pessoas.update');
+        Route::delete('/pessoas/{pessoa}', 'destroy')->name('pessoas.destroy');
+        Route::patch('/pessoas/{pessoa}/toggle-status', 'toggleStatus')->name('pessoas.toggle-status');
+        Route::patch('/pessoas/{id}/restore', 'restore')->name('pessoas.restore');
+        Route::post('/pessoas/{pessoa}/photo', 'photo')->name('pessoas.photo');
     });
     
 });
