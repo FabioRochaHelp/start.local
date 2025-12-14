@@ -21,6 +21,19 @@ Route::get('/atepacie', [AtepacieController::class, 'index'])->name('atepacie.in
 Route::get('/ateconsu', [AteconsuController::class, 'index'])->name('ateconsu.index');
 Route::get('/ateagenc', [AtegencController::class, 'index'])->name('ateagenc.index');
 
+// Rotas de confirmação de agendamento
+Route::prefix('confirmar-agendamento')
+    ->name('ateflate.')
+    ->group(function () {
+        Route::get('/{id}', [AteflateController::class, 'showConfirmacao'])
+            ->name('confirmacao.show')
+            ->where('id', '[0-9]+');
+
+        Route::post('/processar', [AteflateController::class, 'processar'])->name('processar');
+
+        Route::get('/sucesso', [AteflateController::class, 'sucesso'])->name('confirmacao.sucesso');
+    });
+
 // Rotas públicas para confirmação de agendamento (acessível via link do WhatsApp, funciona com ou sem autenticação)
 Route::get('/agendamentos/confirmar/{id}', [AtegencController::class, 'confirmar'])->name('ateagenc.confirmar');
 Route::post('/agendamentos/confirmar/{id}', [AtegencController::class, 'processarConfirmacao'])->name('ateagenc.processar.confirmacao');
@@ -44,9 +57,7 @@ Route::controller(LoginController::class)->group(function () {
     Route::get('reset-password/{token}', 'NewPasswordCreate')->name('password.reset');
 });
 
-
 Route::middleware(['auth'])->group(function () {
-
     Route::controller(UserController::class)->group(function () {
         Route::get('/user/profile/{id}', 'userProfileView')->name('user.profile.view');
         Route::get('/users', 'index')->name('users');
@@ -144,5 +155,4 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/ateagenc/search/nome-consulta/{nome}', 'searchByNomeConsulta')->name('ateagenc.search.nome.consulta.param');
         Route::get('/ateagenc/search/nome-consulta', 'searchByNomeConsulta')->name('ateagenc.search.nome.consulta');
     });
-    
 });

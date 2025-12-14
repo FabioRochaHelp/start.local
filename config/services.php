@@ -30,5 +30,11 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'ateflate_api' => [
+    'url' => env('ATEFLATE_API_URL', 'http://localhost:3001'),
+    'timeout' => env('ATEFLATE_API_TIMEOUT', 30),
+    'retry_attempts' => env('ATEFLATE_API_RETRY_ATTEMPTS', 3),
+    'fallback_enabled' => env('ATEFLATE_API_FALLBACK_ENABLED', true),
+],
 
 ];
