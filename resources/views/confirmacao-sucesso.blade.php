@@ -9,44 +9,49 @@
                     <div class="mb-4">
                         <i class="material-icons display-1 text-success">check_circle</i>
                     </div>
-                    
+
                     <h4 class="mb-3">
-                        @if(session('acao') === 'confirmar')
-                            Agendamento Confirmado!
+                        @if ($acao == 'confirmar')
+                            Agendamento Confirmado com Sucesso!
                         @else
-                            Agendamento Cancelado!
+                            Agendamento Cancelado com Sucesso!
                         @endif
                     </h4>
-                    
+
                     <p class="text-muted mb-4">
-                        Sua solicitação foi processada com sucesso.
-                        @if(session('acao') === 'confirmar')
-                            Aguarde a confirmação da clínica.
+                        Sua solicitação foi processada com sucesso.<br>
+                        @if ($acao == 'confirmar')
+                            Obrigado por confirmar seu agendamento.<br>
+                            O número do seu registro é <strong>{{ $id }}</strong>.
                         @else
-                            Seu agendamento foi cancelado.
+                            Seu agendamento foi cancelado conforme solicitado.
                         @endif
+
                     </p>
-                    
+
                     <div class="d-grid gap-2 d-md-flex justify-content-center">
-                        <a href="{{ route('home') }}" class="btn btn-primary px-4">
+                        <a href="#" class="btn btn-primary px-4">
                             <i class="material-icons align-middle">home</i>
                             Voltar para o Início
                         </a>
-                        
+
                         <button onclick="window.print()" class="btn btn-outline-secondary px-4">
                             <i class="material-icons align-middle">print</i>
                             Imprimir Comprovante
                         </button>
                     </div>
-                    
+
                     <hr class="my-4">
-                    
+
                     <div class="text-start">
                         <h6 class="mb-2">Informações:</h6>
                         <ul class="list-unstyled small text-muted">
-                            <li><i class="material-icons align-middle text-success fs-6">check</i> Registro processado com sucesso</li>
-                            <li><i class="material-icons align-middle text-success fs-6">check</i> Notificação enviada para a clínica</li>
-                            <li><i class="material-icons align-middle text-success fs-6">check</i> Comprovante disponível para impressão</li>
+                            <li><i class="material-icons align-middle text-success fs-6">check</i> Registro processado
+                                com sucesso</li>
+                            <li><i class="material-icons align-middle text-success fs-6">check</i> Notificação enviada
+                                para a clínica</li>
+                            <li><i class="material-icons align-middle text-success fs-6">check</i> Comprovante
+                                disponível para impressão</li>
                         </ul>
                     </div>
                 </div>

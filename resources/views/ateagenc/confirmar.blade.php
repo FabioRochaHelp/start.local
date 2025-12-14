@@ -268,6 +268,7 @@
                     alert(`Agendamento ${acao === 'confirmar' ? 'confirmado' : 'cancelado'} com sucesso!`);
                     
                     // Redirecionar para página de confirmação
+                  window.location.href = `{{ route('ateflate.confirmacao.sucesso') }}?acao=${acao}&id=${dados.NNUMEFLATE}`;
                     
                 } else {
                     // Erro da API

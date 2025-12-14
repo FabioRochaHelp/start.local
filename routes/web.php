@@ -13,6 +13,7 @@ use App\Http\Controllers\AteatendController;
 use App\Http\Controllers\AtepacieController;
 use App\Http\Controllers\AteconsuController;
 use App\Http\Controllers\AtegencController;
+use App\Http\Controllers\AteflateController;
 
 Route::get('/health', [HealthController::class, 'index'])->name('health.view');
 Route::get('/message', [MessageController::class, 'index'])->name('message.view');
@@ -31,9 +32,8 @@ Route::prefix('confirmar-agendamento')
 
         Route::post('/processar', [AteflateController::class, 'processar'])->name('processar');
 
-        Route::get('/sucesso', [AteflateController::class, 'sucesso'])->name('confirmacao.sucesso');
+        Route::get('/sucesso', [AteflateController::class, 'sucesso'])->name('confirmacao.sucesso'); // 🔥 CORRIGIDO: Remove 'ateflate.'
     });
-
 // Rotas públicas para confirmação de agendamento (acessível via link do WhatsApp, funciona com ou sem autenticação)
 Route::get('/agendamentos/confirmar/{id}', [AtegencController::class, 'confirmar'])->name('ateagenc.confirmar');
 Route::post('/agendamentos/confirmar/{id}', [AtegencController::class, 'processarConfirmacao'])->name('ateagenc.processar.confirmacao');

@@ -232,11 +232,12 @@ class AteflateController extends Controller
 
     /**
      * Página de sucesso
-     */
-    public function sucesso()
+     */ 
+    public function sucesso( Request $request)
     {
         return view('confirmacao-sucesso', [
-            'acao' => session('acao', 'confirmar')
+            'acao' => $request->acao ?? 'N/A',
+            'id' => $request->id ?? 'N/A'
         ]);
     }
 
