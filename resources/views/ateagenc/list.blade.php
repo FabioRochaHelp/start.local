@@ -6,7 +6,7 @@
                     <ol class="breadcrumb ps-0">
                         <li class="breadcrumb-item"><i class="material-icons">home</i> <a
                                 href="{{ route('home.view') }}">Home</a> </li>
-                        <li class="breadcrumb-item"><a href="{{ route('ateagencindex') }}">Agendamentos</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('ateagenc.index') }}">Agendamentos</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Lista de Agendamentos</li>
                     </ol>
                 </nav>

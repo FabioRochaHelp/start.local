@@ -50,13 +50,13 @@ class NotificarAgendamentosJob implements ShouldQueue
     public function handle(): void
     {
         try {
-            Log::info('Iniciando verificação de agendamentos para o dia posterior');
+          //  Log::info('Iniciando verificação de agendamentos para o dia posterior');
 
             // Data do dia posterior
             $dataProximoDia = Carbon::tomorrow()->format('Y-m-d');
             $dataProximoDiaFormatada = Carbon::tomorrow()->format('d/m/Y');
 
-            Log::info('Buscando agendamentos para: ' . $dataProximoDia);
+         //   Log::info('Buscando agendamentos para: ' . $dataProximoDia);
 
             // Buscar todos os agendamentos com detalhes
             $offset = 0;
@@ -102,12 +102,12 @@ class NotificarAgendamentosJob implements ShouldQueue
 
             } while ($offset < $total);
 
-            Log::info('Processamento de agendamentos concluído', [
-                'data' => $dataProximoDiaFormatada,
-                'total_processados' => $totalProcessados,
-                'total_enviados' => $totalEnviados,
-                'total_erros' => $totalErros
-            ]);
+            // Log::info('Processamento de agendamentos concluído', [
+            //     'data' => $dataProximoDiaFormatada,
+            //     'total_processados' => $totalProcessados,
+            //     'total_enviados' => $totalEnviados,
+            //     'total_erros' => $totalErros
+            // ]);
 
         } catch (Exception $e) {
             Log::error('Erro ao processar agendamentos', [
@@ -257,7 +257,7 @@ class NotificarAgendamentosJob implements ShouldQueue
         $horario = $agendamento['CHORAAGENC'] ?? 'Agendamento a confirmar';
 
         // Obtém ID do agendamento para o link
-        $idAgendamento = $agendamento['NNUMAGENC'] ?? 1;
+        $idAgendamento = $agendamento['NNUMEAGENC'] ?? 1;
 
         // Formata o número do telefone (remove caracteres não numéricos)
         $numeroLimpo = preg_replace('/[^0-9]/', '', $telefone);
@@ -270,15 +270,13 @@ class NotificarAgendamentosJob implements ShouldQueue
         // Monta a mensagem base (sem o link) 
         $mensagem = $this->montarMensagem($nomePaciente, $nomeConsulta, $tipoConsulta, $dataFormatada, $horario);
 
-        Log::info('Enviando notificação de agendamento', [
-            'paciente' => $nomePaciente,
-            'telefone' => $numeroLimpo,
-            'data' => $dataFormatada,
-            'horario' => $horario,
-            'idAgendamento' => $idAgendamento
-        ]);
-
-        $idAgendamento = 1;
+        // Log::info('Enviando notificação de agendamento', [
+        //     'paciente' => $nomePaciente,
+        //     'telefone' => $numeroLimpo,
+        //     'data' => $dataFormatada,
+        //     'horario' => $horario,
+        //     'idAgendamento' => $idAgendamento
+        // ]);
 
         // Se houver ID do agendamento, envia o link com preview
         if ($idAgendamento) {
@@ -297,11 +295,11 @@ class NotificarAgendamentosJob implements ShouldQueue
                 throw new Exception('Erro ao enviar link: ' . ($result['error'] ?? 'Erro desconhecido'));
             }
 
-            Log::info('Link com preview enviado com sucesso', [
-                'paciente' => $nomePaciente,
-                'telefone' => $numeroLimpo,
-                'url' => $urlConfirmacao
-            ]);
+            // Log::info('Link com preview enviado com sucesso', [
+            //     'paciente' => $nomePaciente,
+            //     'telefone' => $numeroLimpo,
+            //     'url' => $urlConfirmacao
+            // ]);
         } else {
             // Se não houver link, envia apenas a mensagem de texto
             $result = $this->messageService->sendText($this->sessionName, $numeroLimpo, $mensagem);
@@ -310,10 +308,10 @@ class NotificarAgendamentosJob implements ShouldQueue
                 throw new Exception('Erro ao enviar mensagem: ' . ($result['error'] ?? 'Erro desconhecido'));
             }
 
-            Log::info('Notificação enviada com sucesso', [
-                'paciente' => $nomePaciente,
-                'telefone' => $numeroLimpo
-            ]);
+            // Log::info('Notificação enviada com sucesso', [
+            //     'paciente' => $nomePaciente,
+            //     'telefone' => $numeroLimpo
+            // ]);
         }
     }
 
