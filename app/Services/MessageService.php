@@ -27,8 +27,45 @@ class MessageService
      */
     public function __construct()
     {
-        $this->baseUrl = env('MESSAGE_SERVICE_URL', 'http://localhost:3333');
+        $this->baseUrl = env('MESSAGE_SERVICE_URL', 'https://api.wts.chat/chat/v1');
         $this->timeout = env('MESSAGE_SERVICE_TIMEOUT', 30);
+    }
+
+
+    /**
+     * Listagem de canais de atendimento
+     * @return array
+     * @throws Exception
+     */
+    public function listChannels(): array
+    {
+        try {
+            $url = rtrim($this->baseUrl, '/') . '/channel';
+
+            Log::info('Listando canais de atendimento', [
+                'url' => $url
+            ]);
+
+            $response = Http::withHeaders([
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer pn_2swSS0oxshnjBLlKe2gYz4drFRdhMaJ05QwzHBVIq2o'
+            ])
+            ->timeout($this->timeout)
+            ->get($url);
+
+            if ($response->successful()) {
+                return [
+                    'success' => true,
+                    'data' => $response->json()
+                ];
+            }
+
+            throw new Exception('Erro ao listar canais de atendimento: ' . $response->json()['message']);
+            
+        } catch (Exception $e) {
+            throw new Exception('Erro ao listar canais de atendimento: ' . $e->getMessage(), 0, $e  );
+        }
     }
 
     /**

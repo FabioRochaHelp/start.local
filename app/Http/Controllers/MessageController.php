@@ -107,5 +107,29 @@ class MessageController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Lista canais de atendimento via API
+     *
+     * @return JsonResponse
+     */
+    public function listChannels(): JsonResponse
+    {
+        try {
+            $result = $this->messageService->listChannels();
+
+            if ($result['success']) {
+                return response()->json($result, 200);
+            } else {
+                return response()->json($result, 400);
+            }
+
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
 

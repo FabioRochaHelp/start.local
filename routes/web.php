@@ -155,4 +155,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/ateagenc/search/nome-consulta/{nome}', 'searchByNomeConsulta')->name('ateagenc.search.nome.consulta.param');
         Route::get('/ateagenc/search/nome-consulta', 'searchByNomeConsulta')->name('ateagenc.search.nome.consulta');
     });
+
+    Route::controller(MessageController::class)->group(function () {
+        Route::get('/message/send', 'sendMessageView')->name('message.send.view');
+        Route::post('/message/send', 'sendMessage')->name('message.send.form');
+        Route::get('/message/status', 'statusView')->name('message.status.view');
+        Route::post('/message/status', 'status')->name('message.status.form');
+      
+        Route::post('/message/channels', 'listChannels')->name('message.channels.form');
+    });
 });

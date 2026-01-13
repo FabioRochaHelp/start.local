@@ -29,6 +29,9 @@ Route::post('/message/send', [MessageController::class, 'send'])->name('api.mess
 // Message Service - Verificar status da sessão
 Route::get('/message/status', [MessageController::class, 'status'])->name('api.message.status');
 
+// Message Service - Listar canais de atendimento
+Route::get('/message/channels', [MessageController::class, 'listChannels'])->name('api.message.channels');
+
 // Ateatend Service - Pacientes
 Route::get('/ateatend/list', [AteatendController::class, 'list'])->name('api.ateatend.list');
 Route::get('/ateatend/count', [AteatendController::class, 'count'])->name('api.ateatend.count');
