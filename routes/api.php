@@ -8,6 +8,7 @@ use App\Http\Controllers\AteatendController;
 use App\Http\Controllers\AtepacieController;
 use App\Http\Controllers\AteconsuController;
 use App\Http\Controllers\AtegencController;
+use App\Http\Controllers\CanalAtendimentoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,16 @@ Route::get('/message/status', [MessageController::class, 'status'])->name('api.m
 
 // Message Service - Listar canais de atendimento
 Route::get('/message/channels', [MessageController::class, 'listChannels'])->name('api.message.channels');
+
+// routes/api.php
+Route::get('/canal-atendimento/current', [CanalAtendimentoController::class, 'current'])
+    ->name('api.canal-atendimento.current');
+
+Route::post('/canal-atendimento/store-or-update', [CanalAtendimentoController::class, 'storeOrUpdate'])
+    ->name('canal-atendimento.storeOrUpdate');
+
+Route::delete('/canal-atendimento/{id}', [CanalAtendimentoController::class, 'destroy'])
+    ->name('canal-atendimento.destroy');
 
 // Ateatend Service - Pacientes
 Route::get('/ateatend/list', [AteatendController::class, 'list'])->name('api.ateatend.list');

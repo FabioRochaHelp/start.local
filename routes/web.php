@@ -14,6 +14,7 @@ use App\Http\Controllers\AtepacieController;
 use App\Http\Controllers\AteconsuController;
 use App\Http\Controllers\AtegencController;
 use App\Http\Controllers\AteflateController;
+use App\Http\Controllers\CanalAtendimentoController;
 
 Route::get('/health', [HealthController::class, 'index'])->name('health.view');
 Route::get('/message', [MessageController::class, 'index'])->name('message.view');
@@ -163,5 +164,14 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/message/status', 'status')->name('message.status.form');
       
         Route::post('/message/channels', 'listChannels')->name('message.channels.form');
+    });
+
+    Route::controller(ChannelController::class)->group(function () {
+        Route::get('/channel/list', 'list')->name('channel.index');
+        Route::get('/channel/create', 'create')->name('channel.create');
+        Route::post('/channel/store', 'store')->name('channel.store');
+        Route::get('/channel/edit/{id}', 'edit')->name('channel.edit');
+        Route::put('/channel/update/{id}', 'update')->name('channel.update');
+        Route::get('/channel/delete/{id}', 'destroy')->name('channel.delete');
     });
 });
