@@ -26,14 +26,22 @@ class CanalAtendimentoController extends Controller
     
     public function storeOrUpdate(Request $request)
     {
-        // Validação
+
+        //Mensagem personalizada validacao
+        $messages = [
+            'channelName.required' => 'O nome do canal é obrigatório.',
+            'channelValue.required' => 'O valor do canal é obrigatório.',
+            'tipo.required' => 'O tipo do canal é obrigatório.',
+            'tipo.in' => 'O tipo do canal deve ser um dos seguintes: whatsapp, telegram, messenger, instagram, sms, email, outro.'
+        ];
+
         $request->validate([
             'channelName' => 'required|string|max:255',
             'channelValue' => 'required|string|max:255',
             'tipo' => 'required|string|in:whatsapp,telegram,messenger,instagram,sms,email,outro',
             'ativo' => 'boolean'
-        ]);
-        
+        ], $messages);
+
         // Buscar ou criar canal
         $canal = CanalAtendimento::first();
         
