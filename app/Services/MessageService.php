@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\CanalAtendimento;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Exception;
@@ -87,12 +88,24 @@ class MessageService
     public function sendText(string $sessionName, string $number, string $text): array
     {
         try {
-            $url = rtrim($this->baseUrl, '/') . '/sendText';
+            $channel = CanalAtendimento::first();
+            $from = $channel?->channelValue;
+
+            if (!$from) {
+                return [
+                    'success' => false,
+                    'error' => 'Canal de atendimento não configurado.'
+                ];
+            }
+
+            $url = rtrim($this->baseUrl, '/') . '/message/send';
 
             $payload = [
-                'sessionName' => $sessionName,
-                'number' => $number,
-                'text' => $text
+                'body' => [
+                    'text' => $text,
+                ],
+                'from' => $from,
+                'to' => $number,
             ];
 
             Log::info('Enviando mensagem', [
@@ -103,7 +116,8 @@ class MessageService
             $response = Http::timeout($this->timeout)
                 ->withHeaders([
                     'Accept' => 'application/json',
-                    'Content-Type' => 'application/json'
+                    'Content-Type' => 'application/*+json',
+                    'Authorization' => $this->formatAuthorizationHeader(),
                 ])
                 ->post($url, $payload);
 
@@ -120,7 +134,9 @@ class MessageService
                     'message' => 'Mensagem enviada com sucesso'
                 ];
             } else {
-                $errorMessage = 'Erro ao enviar mensagem. Status: ' . $response->status();
+                $errorMessage = $response->json('message')
+                    ?? $response->reason()
+                    ?? 'Erro ao enviar mensagem';
                 
                 Log::error('Erro ao enviar mensagem', [
                     'status' => $response->status(),
