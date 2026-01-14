@@ -21,6 +21,12 @@ class MessageService
      * @var int
      */
     private $timeout;
+    /**
+     * Token de autenticação
+     *
+     * @var string
+     */
+    private $token;
 
     /**
      * Construtor
@@ -29,6 +35,7 @@ class MessageService
     {
         $this->baseUrl = env('MESSAGE_SERVICE_URL', 'https://api.wts.chat/chat/v1');
         $this->timeout = env('MESSAGE_SERVICE_TIMEOUT', 30);
+        $this->token = 'Bearer pn_2swSS0oxshnjBLlKe2gYz4drFRdhMaJ05QwzHBVIq2o';
     }
 
 
@@ -211,9 +218,16 @@ class MessageService
                 ];
             }
 
-            $url = rtrim($this->baseUrl, '/') . '/status';
-            
-            Log::info('Verificando status da sessão', [
+            if ($this->token === '') {
+                return [
+                    'success' => false,
+                    'error' => 'MESSAGE_SERVICE_TOKEN não configurado.'
+                ];
+            }
+
+            $url = rtrim($this->baseUrl, '/') . '/channel';
+
+            Log::info('Buscando canais para verificar status', [
                 'url' => $url,
                 'sessionName' => $sessionName
             ]);
@@ -221,43 +235,73 @@ class MessageService
             $response = Http::timeout($this->timeout)
                 ->withHeaders([
                     'Accept' => 'application/json',
-                    'Content-Type' => 'application/json'
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Bearer pn_2swSS0oxshnjBLlKe2gYz4drFRdhMaJ05QwzHBVIq2o',
                 ])
-                ->get($url, [
-                    'sessionName' => $sessionName
-                ]);
+                ->get($url);
 
             if ($response->successful()) {
-                $data = $response->json();
-                
-                Log::info('Status da sessão obtido com sucesso', [
-                    'sessionName' => $sessionName,
-                    'response' => $data
-                ]);
+                $channels = $response->json();
+
+                if (!is_array($channels)) {
+                    return [
+                        'success' => false,
+                        'error' => 'Resposta inválida ao listar canais',
+                        'data' => $channels
+                    ];
+                }
+
+                $channel = null;
+                foreach ($channels as $item) {
+                    if (!is_array($item)) {
+                        continue;
+                    }
+
+                    $id = $item['id'] ?? null;
+                    $humanId = $item['identity']['humanId'] ?? null;
+
+                    if ($id === $sessionName || $humanId === $sessionName) {
+                        $channel = $item;
+                        break;
+                    }
+                }
+
+                if (!$channel) {
+                    return [
+                        'success' => false,
+                        'error' => 'Canal não encontrado para o identificador informado',
+                        'sessionName' => $sessionName
+                    ];
+                }
+
+                $active = $channel['active'] ?? null;
+                $status = $active === true ? 'ACTIVE' : ($active === false ? 'INACTIVE' : 'UNKNOWN');
 
                 return [
                     'success' => true,
-                    'data' => $data,
+                    'data' => $channel,
                     'sessionName' => $sessionName,
-                    'status' => $data['result'] ?? 'UNKNOWN'
-                ];
-            } else {
-                $errorMessage = 'Erro ao verificar status da sessão. Status: ' . $response->status();
-                
-                Log::error('Erro ao verificar status da sessão', [
-                    'sessionName' => $sessionName,
-                    'status' => $response->status(),
-                    'body' => $response->body()
-                ]);
-
-                return [
-                    'success' => false,
-                    'error' => $errorMessage,
-                    'status' => $response->status(),
-                    'data' => $response->json()
+                    'status' => $status,
+                    'active' => $active
                 ];
             }
 
+            $errorMessage = $response->json('message')
+                ?? $response->reason()
+                ?? 'Resposta inesperada da API';
+
+            Log::error('Erro ao listar canais', [
+                'sessionName' => $sessionName,
+                'status' => $response->status(),
+                'body' => $response->body()
+            ]);
+
+            return [
+                'success' => false,
+                'error' => 'Erro ao listar canais: ' . $errorMessage,
+                'status' => $response->status(),
+                'data' => $response->json()
+            ];
         } catch (Exception $e) {
             Log::error('Exceção ao verificar status da sessão', [
                 'sessionName' => $sessionName,
@@ -267,6 +311,15 @@ class MessageService
 
             throw new Exception('Erro ao verificar status da sessão: ' . $e->getMessage(), 0, $e);
         }
+    }
+
+    private function formatAuthorizationHeader(): string
+    {
+        if (str_starts_with($this->token, 'Bearer ')) {
+            return $this->token;
+        }
+
+        return 'Bearer ' . $this->token;
     }
 
     /**

@@ -36,5 +36,10 @@ return [
     'retry_attempts' => env('ATEFLATE_API_RETRY_ATTEMPTS', 3),
     'fallback_enabled' => env('ATEFLATE_API_FALLBACK_ENABLED', true),
 ],
+    'message_service' => [
+        'url' => env('MESSAGE_SERVICE_URL', 'https://api.wts.chat/chat/v1'),
+        'timeout' => env('MESSAGE_SERVICE_TIMEOUT', 30),
+        'token' => env('MESSAGE_SERVICE_TOKEN'),
+    ],
 
 ];
