@@ -3,6 +3,28 @@
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
+$providers = ServiceProvider::defaultProviders()->merge([
+    /*
+     * Package Service Providers...
+     */
+
+    /*
+     * Application Service Providers...
+     */
+    App\Providers\AppServiceProvider::class,
+    App\Providers\AuthServiceProvider::class,
+    // App\Providers\BroadcastServiceProvider::class,
+    App\Providers\EventServiceProvider::class,
+    App\Providers\RouteServiceProvider::class,
+    App\Providers\ViewServiceProvider::class,
+    //\App\Providers\TenancyServiceProvider::class,
+    Barryvdh\DomPDF\ServiceProvider::class,
+])->toArray();
+
+if (env('APP_DEBUG', false) && class_exists(Barryvdh\Debugbar\ServiceProvider::class)) {
+    $providers[] = Barryvdh\Debugbar\ServiceProvider::class;
+}
+
 return [
 
     /*
@@ -156,25 +178,7 @@ return [
     |
     */
 
-    'providers' => ServiceProvider::defaultProviders()->merge([
-        /*
-         * Package Service Providers...
-         */
-
-
-        /*
-         * Application Service Providers...
-         */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
-        App\Providers\ViewServiceProvider::class,
-        //\App\Providers\TenancyServiceProvider::class,
-        Barryvdh\Debugbar\ServiceProvider::class,
-        Barryvdh\DomPDF\ServiceProvider::class,
-    ])->toArray(),
+    'providers' => $providers,
 
     /*
     |--------------------------------------------------------------------------
